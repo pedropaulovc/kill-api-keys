@@ -1,0 +1,16 @@
+{
+  "name": "kill-api-keys",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "htmlhint index.html",
+    "typecheck": "echo 'No TypeScript files to check'",
+    "test": "echo 'No unit tests yet'",
+    "e2e": "echo 'No e2e tests yet'",
+    "dev": "npx serve ."
+  },
+  "devDependencies": {
+    "htmlhint": "^1.1.4"
+  }
+}
