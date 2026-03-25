@@ -10,6 +10,7 @@
     "e2e": "echo 'No e2e tests yet'",
     "dev": "npx serve ."
   },
+  "packageManager": "pnpm@10.33.0",
   "devDependencies": {
     "htmlhint": "^1.1.4"
   }
