@@ -3,13 +3,13 @@ let path = [];
 function renderBreadcrumb() {
   const bc = document.getElementById('breadcrumb');
   if (path.length === 0) { bc.innerHTML = ''; return; }
-  let html = '<span class="crumb">Start</span>';
+  let html = '<crumb-item>Start</crumb-item>';
   path.forEach((entry, i) => {
     const node = allNodes[entry.nodeId];
     const chosen = node.options.find(o => o.next === entry.chosenNext);
     const isLast = i === path.length - 1;
     const short = chosen ? (chosen.label.length > 28 ? chosen.label.substring(0, 26) + '\u2026' : chosen.label) : '';
-    html += '<span class="crumb-sep">\u203A</span><span class="crumb' + (isLast ? ' active' : '') + '">' + short + '</span>';
+    html += '<crumb-sep>\u203A</crumb-sep><crumb-item' + (isLast ? ' active' : '') + '>' + short + '</crumb-item>';
   });
   bc.innerHTML = html;
 }
@@ -21,15 +21,15 @@ function render() {
   path.forEach((entry, i) => {
     const node = allNodes[entry.nodeId];
     const chosen = node.options.find(o => o.next === entry.chosenNext);
-    html += '<div class="question-card past" onclick="rewindTo(' + i + ')">';
-    html += '<div class="step-badge">' + node.step + '</div>';
-    html += '<div class="q-text">' + node.question + '</div>';
-    if (node.hint) html += '<div class="q-hint">' + node.hint + '</div>';
-    html += '<div class="options">';
+    html += '<question-card past onclick="rewindTo(' + i + ')">';
+    html += '<step-badge>' + node.step + '</step-badge>';
+    html += '<q-text>' + node.question + '</q-text>';
+    if (node.hint) html += '<q-hint>' + node.hint + '</q-hint>';
+    html += '<option-list>';
     node.options.forEach(o => {
-      html += '<div class="opt-btn' + (o === chosen ? ' selected' : '') + '">' + o.label + '</div>';
+      html += '<div class="opt-btn' + (o === chosen ? '" selected' : '"') + '>' + o.label + '</div>';
     });
-    html += '</div></div>';
+    html += '</option-list></question-card>';
   });
 
   const lastChoice = path.length > 0 ? path[path.length - 1] : null;
@@ -37,22 +37,22 @@ function render() {
 
   if (currentNextId && results[currentNextId]) {
     const r = results[currentNextId];
-    html += '<div class="result-card">';
-    html += '<div class="result-label">Recommendation</div>';
-    html += '<div class="result-title">' + r.title + '</div>';
-    html += '<div class="result-desc">' + r.desc + '</div>';
-    html += '<div class="tag-row">';
-    r.pros.forEach(p => { html += '<span class="tag pro">' + p + '</span>'; });
-    r.cons.forEach(c => { html += '<span class="tag con">' + c + '</span>'; });
-    html += '</div>';
+    html += '<result-card>';
+    html += '<result-label>Recommendation</result-label>';
+    html += '<result-title>' + r.title + '</result-title>';
+    html += '<result-desc>' + r.desc + '</result-desc>';
+    html += '<tag-row>';
+    r.pros.forEach(p => { html += '<auth-tag pro>' + p + '</auth-tag>'; });
+    r.cons.forEach(c => { html += '<auth-tag con>' + c + '</auth-tag>'; });
+    html += '</tag-row>';
     if (r.ask) {
       html += '<div style="margin-top:16px;padding:12px 14px;background:var(--bg-info);border-radius:var(--radius-sm);font-size:0.8125rem;line-height:1.55;color:var(--text-info);">';
       html += '<strong style="display:block;margin-bottom:4px;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;opacity:0.8;">What to ask the API provider</strong>';
       html += r.ask;
       html += '</div>';
     }
-    html += '</div>';
-    html += '<div class="actions"><button class="reset-btn" onclick="resetTree()">Start over</button></div>';
+    html += '</result-card>';
+    html += '<card-actions><button class="reset-btn" onclick="resetTree()">Start over</button></card-actions>';
   } else if (path.length === 0) {
     html += renderQuestion('root');
   } else if (currentNextId && allNodes[currentNextId]) {
@@ -65,15 +65,15 @@ function render() {
 
 function renderQuestion(nodeId) {
   const node = allNodes[nodeId];
-  let html = '<div class="question-card">';
-  html += '<div class="step-badge">' + node.step + '</div>';
-  html += '<div class="q-text">' + node.question + '</div>';
-  if (node.hint) html += '<div class="q-hint">' + node.hint + '</div>';
-  html += '<div class="options">';
+  let html = '<question-card>';
+  html += '<step-badge>' + node.step + '</step-badge>';
+  html += '<q-text>' + node.question + '</q-text>';
+  if (node.hint) html += '<q-hint>' + node.hint + '</q-hint>';
+  html += '<option-list>';
   node.options.forEach(o => {
     html += '<button class="opt-btn" onclick="choose(\'' + nodeId + '\',\'' + o.next + '\')">' + o.label + '</button>';
   });
-  html += '</div></div>';
+  html += '</option-list></question-card>';
   return html;
 }
 
