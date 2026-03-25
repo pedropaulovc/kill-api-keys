@@ -8,7 +8,8 @@ Static website advocating for better API authentication practices. Hosted on Clo
 
 - **Production domain:** killapikeys.fyi (eventual), killapikeys.vza.net (current)
 - **DNS zone:** vza.net (managed in Cloudflare)
-- **Hosting:** Cloudflare Pages (static files, no build step — Pages serves from repo root)
+- **Hosting:** Cloudflare Pages with GitHub Git integration (auto-deploys on push to main, no build step — Pages serves from repo root)
+- **Cloudflare account ID:** 18ef3246e9f36d1560485ef53889c0ab
 
 ## Commands
 
@@ -27,9 +28,17 @@ Single-page static site — all content lives in `index.html` (HTML + CSS + vani
 
 The page is an interactive decision tree that guides users through choosing the right API authentication method. Data (`allNodes` and `results` objects) and rendering logic are both inline in `<script>` tags within the HTML.
 
+## Deployment
+
+Cloudflare Pages Git integration auto-deploys on every push to `main`. No CI deploy step or API tokens needed. Preview deployments are created for all branches/PRs.
+
+Cloudflare Pages config and custom domains can be managed via the Cloudflare API using the wrangler OAuth token at `~/.config/.wrangler/config/default.toml`. The token has `pages:write` scope but not DNS write — DNS changes require the Cloudflare dashboard.
+
 ## CI / branch protection
 
 GitHub Actions CI (`.github/workflows/ci.yml`) runs four jobs matching the required status checks: `lint`, `typecheck`, `unit-tests`, `e2e-tests`. The `main` branch is protected via rulesets (merge-only, no squash/rebase). Tags matching `v*` are immutable.
+
+All changes to `main` go through PRs. Direct pushes are blocked.
 
 ## Repo policies
 
