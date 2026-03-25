@@ -24,9 +24,13 @@ pnpm dev              # local dev server (npx serve .)
 
 ## Architecture
 
-Single-page static site — all content lives in `index.html` (HTML + CSS + vanilla JS, no build pipeline).
+Single-page static site (HTML + CSS + vanilla JS, no build pipeline).
 
-The page is an interactive decision tree that guides users through choosing the right API authentication method. Data (`allNodes` and `results` objects) and rendering logic are both inline in `<script>` tags within the HTML.
+The page is an interactive decision tree that guides users through choosing the right API authentication method.
+
+- `index.html` — markup and CSS
+- `decision-tree.js` — data (`allNodes` questions and `results` recommendations)
+- `ui.js` — rendering logic (breadcrumb, question cards, result cards)
 
 ## Deployment
 
