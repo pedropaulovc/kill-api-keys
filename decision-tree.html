@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Auth Decision Tree &mdash; Kill API Keys</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<page-container>
+  <site-nav>
+    <a href="/">Manifesto</a>
+    <a href="/decision-tree.html" aria-current="page">Decision Tree</a>
+    <a href="/hall-of-shame.html">Hall of Shame</a>
+  </site-nav>
+  <page-header>
+    <header-tag>Interactive guide</header-tag>
+    <h1>Choosing the right API auth</h1>
+    <p>Answer a few questions about your setup to get a tailored recommendation. Click any past step to rewind and explore a different branch.</p>
+  </page-header>
+  <bread-crumb id="breadcrumb"></bread-crumb>
+  <div id="tree"></div>
+</page-container>
+
+<script src="decision-tree.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

@@ -15,7 +15,7 @@ Static website advocating for better API authentication practices. Hosted on Clo
 
 ```bash
 pnpm install          # install dependencies
-pnpm lint             # htmlhint on index.html
+pnpm lint             # htmlhint on all HTML pages
 pnpm typecheck        # placeholder (no TS yet)
 pnpm test             # placeholder (no unit tests yet)
 pnpm e2e              # placeholder (no e2e tests yet)
@@ -24,13 +24,18 @@ pnpm dev              # local dev server (npx serve .)
 
 ## Architecture
 
-Single-page static site (HTML + CSS + vanilla JS, no build pipeline).
+Multi-page static site (HTML + CSS + vanilla JS, no build pipeline).
 
-The page is an interactive decision tree that guides users through choosing the right API authentication method.
+Three pages: a manifesto against API keys, an interactive decision tree for choosing the right auth method, and a "Hall of Shame" clearinghouse of services and their auth support.
 
-- `index.html` — markup and CSS
-- `decision-tree.js` — data (`allNodes` questions and `results` recommendations)
-- `ui.js` — rendering logic (breadcrumb, question cards, result cards)
+- `index.html` — manifesto homepage (static content, no JS)
+- `decision-tree.html` — interactive decision tree page
+- `hall-of-shame.html` — services clearinghouse page
+- `styles.css` — shared stylesheet (design tokens, components, page-specific styles)
+- `decision-tree.js` — decision tree data (`allNodes` questions and `results` recommendations)
+- `ui.js` — decision tree rendering logic (breadcrumb, question cards, result cards)
+- `hall-of-shame-data.js` — service directory data (auth methods per service)
+- `hall-of-shame-ui.js` — Hall of Shame rendering logic (cards, filters, stats)
 
 ## Deployment
 

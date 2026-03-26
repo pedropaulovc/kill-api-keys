@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hall of Shame &mdash; Kill API Keys</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<page-container>
+  <site-nav>
+    <a href="/">Manifesto</a>
+    <a href="/decision-tree.html">Decision Tree</a>
+    <a href="/hall-of-shame.html" aria-current="page">Hall of Shame</a>
+  </site-nav>
+
+  <page-header>
+    <header-tag>Clearinghouse</header-tag>
+    <h1>The Hall of Shame</h1>
+    <p>Which API providers still force you to use shared secrets? Services marked
+      in red only support API keys. Yellow means they offer better alternatives
+      but still default to keys. Green means they've moved on.</p>
+  </page-header>
+
+  <div id="shame-stats" class="shame-stats"></div>
+  <div id="filter-bar" class="filter-bar"></div>
+  <div id="shame-list"></div>
+
+  <site-footer>
+    <p>
+      Data wrong or missing? <a href="https://github.com/pedropaulovc/kill-api-keys/issues">Open an issue</a> and we'll update it.
+    </p>
+    <p>
+      <a href="/">Manifesto</a> &middot;
+      <a href="/decision-tree.html">Decision Tree</a> &middot;
+      <a href="https://github.com/pedropaulovc/kill-api-keys">GitHub</a>
+    </p>
+  </site-footer>
+</page-container>
+
+<script src="hall-of-shame-data.js"></script>
+<script src="hall-of-shame-ui.js"></script>
+</body>
+</html>

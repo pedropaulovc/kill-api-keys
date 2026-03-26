@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "htmlhint index.html",
+    "lint": "htmlhint index.html decision-tree.html hall-of-shame.html",
     "typecheck": "echo 'No TypeScript files to check'",
     "test": "echo 'No unit tests yet'",
     "e2e": "echo 'No e2e tests yet'",

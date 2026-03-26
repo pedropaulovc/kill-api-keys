@@ -3,247 +3,171 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>API Auth Decision Tree</title>
+<title>Stop Passing Around API Keys</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #FAFAF8;
-    --bg-card: #FFFFFF;
-    --bg-secondary: #F3F2EE;
-    --bg-info: #E6F1FB;
-    --bg-success: #EAF3DE;
-    --bg-warning: #FAEEDA;
-    --text-primary: #1A1A18;
-    --text-secondary: #6B6A65;
-    --text-tertiary: #9C9B96;
-    --text-info: #185FA5;
-    --text-success: #3B6D11;
-    --text-warning: #854F0B;
-    --border: rgba(0,0,0,0.08);
-    --border-hover: rgba(0,0,0,0.16);
-    --border-info: #85B7EB;
-    --font: 'DM Sans', system-ui, sans-serif;
-    --mono: 'JetBrains Mono', monospace;
-    --radius: 12px;
-    --radius-sm: 8px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #161615;
-      --bg-card: #1E1E1C;
-      --bg-secondary: #2A2A27;
-      --bg-info: #0C2D4F;
-      --bg-success: #1A2E0A;
-      --bg-warning: #2E1E06;
-      --text-primary: #E8E6DF;
-      --text-secondary: #9C9B96;
-      --text-tertiary: #6B6A65;
-      --text-info: #85B7EB;
-      --text-success: #97C459;
-      --text-warning: #FAC775;
-      --border: rgba(255,255,255,0.08);
-      --border-hover: rgba(255,255,255,0.16);
-      --border-info: #378ADD;
-    }
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 16px; }
-  body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    padding: 2rem 1rem;
-    -webkit-font-smoothing: antialiased;
-  }
-  page-container { display: block; max-width: 640px; margin: 0 auto; }
-  page-header {
-    display: block;
-    margin-bottom: 2.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-  header-tag {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-info);
-    background: var(--bg-info);
-    padding: 4px 10px;
-    border-radius: 4px;
-    margin-bottom: 12px;
-  }
-  page-header h1 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
-    margin-bottom: 6px;
-  }
-  page-header p {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
-  question-card {
-    display: block;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    margin-bottom: 12px;
-    transition: opacity 0.3s ease;
-    animation: slideIn 0.3s ease;
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  question-card[past] { opacity: 0.45; cursor: pointer; }
-  question-card[past]:hover { opacity: 0.7; }
-  step-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
-    margin-bottom: 10px;
-  }
-  question-card:not([past]) step-badge {
-    background: var(--bg-info);
-    color: var(--text-info);
-  }
-  q-text {
-    display: block;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: 6px;
-    line-height: 1.4;
-  }
-  q-hint {
-    display: block;
-    font-size: 0.8125rem;
-    color: var(--text-tertiary);
-    margin-bottom: 14px;
-    line-height: 1.45;
-  }
-  q-text + option-list { margin-top: 14px; }
-  option-list { display: flex; flex-wrap: wrap; gap: 8px; }
-  .opt-btn {
-    background: var(--bg-secondary);
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    padding: 9px 16px;
-    font-size: 0.875rem;
-    font-family: var(--font);
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    line-height: 1.35;
-  }
-  .opt-btn:hover { border-color: var(--border-hover); background: var(--bg-card); }
-  .opt-btn:active { transform: scale(0.98); }
-  .opt-btn[selected] {
-    background: var(--bg-info);
-    color: var(--text-info);
-    border-color: var(--border-info);
-    font-weight: 500;
-  }
-  result-card {
-    display: block;
-    background: var(--bg-card);
-    border: 2px solid var(--border-info);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    margin-top: 4px;
-    animation: slideIn 0.35s ease;
-  }
-  result-label {
-    display: block;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-info);
-    margin-bottom: 8px;
-  }
-  result-title {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 6px;
-    letter-spacing: -0.01em;
-  }
-  result-desc {
-    display: block;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.55;
-    margin-bottom: 14px;
-  }
-  tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
-  auth-tag {
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 4px;
-  }
-  auth-tag[pro] { background: var(--bg-success); color: var(--text-success); }
-  auth-tag[con] { background: var(--bg-warning); color: var(--text-warning); }
-  card-actions { display: flex; margin-top: 1.25rem; gap: 12px; flex-wrap: wrap; }
-  .reset-btn {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 9px 18px;
-    font-size: 0.8125rem;
-    font-family: var(--font);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .reset-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
-  bread-crumb {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 1rem;
-    min-height: 24px;
-  }
-  crumb-item {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-    font-family: var(--mono);
-  }
-  crumb-item[active] { color: var(--text-info); }
-  crumb-sep { font-size: 0.7rem; color: var(--text-tertiary); opacity: 0.5; }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <page-container>
-  <page-header>
-    <header-tag>Decision tree</header-tag>
-    <h1>Choosing the right API auth</h1>
-    <p>Answer a few questions about your setup to get a tailored recommendation. Click any past step to rewind and explore a different branch.</p>
-  </page-header>
-  <bread-crumb id="breadcrumb"></bread-crumb>
-  <div id="tree"></div>
-</page-container>
+  <site-nav>
+    <a href="/" aria-current="page">Manifesto</a>
+    <a href="/decision-tree.html">Decision Tree</a>
+    <a href="/hall-of-shame.html">Hall of Shame</a>
+  </site-nav>
 
-<script src="decision-tree.js"></script>
-<script src="ui.js"></script>
+  <!-- ── Hero ──────────────────────────────────────────── -->
+  <div class="manifesto-hero">
+    <h1>Stop passing around API keys.</h1>
+    <p class="subtitle">
+      API keys are shared secrets. They don't expire. They can't be scoped. They
+      leave no audit trail. They are the <strong>passwords of the machine
+      world</strong> &mdash; and we stopped trusting passwords for human
+      authentication years ago. It is time to stop trusting them for machines too.
+    </p>
+  </div>
+
+  <!-- ── Objection ─────────────────────────────────────── -->
+  <manifesto-section>
+    <h2>"But we've always done it this way"</h2>
+    <p>
+      We also used to <strong>telnet</strong> into production boxes. We used to
+      <strong>FTP</strong> deploy by dragging files into a folder. We used to
+      email spreadsheets of shared passwords around the office. The industry
+      moved on from every single one of those practices, and nobody misses them.
+    </p>
+    <p>
+      API keys had their moment. That moment was roughly 2008. Fifteen-plus years
+      later we have OAuth 2.0, OpenID Connect, workload identity, mTLS, and a
+      dozen other standards that don't require you to copy-paste a secret into a
+      <code>.env</code> file and pray nobody commits it.
+    </p>
+    <p>
+      I am asking you &mdash; <strong>politely but firmly</strong> &mdash; to
+      stop using API keys. I have been asking since the first one leaked on
+      GitHub in 2012. Please. I am tired.
+    </p>
+  </manifesto-section>
+
+  <!-- ── Incidents ─────────────────────────────────────── -->
+  <manifesto-section>
+    <h2>The Incident Hall of Horrors</h2>
+    <p>
+      These are not hypothetical risks. These are real breaches, real money lost,
+      and real customer data exposed &mdash; all because somebody's API key ended
+      up where it shouldn't have been.
+    </p>
+
+    <incident-card>
+      <div class="year">2023 &middot; CircleCI</div>
+      <div class="title">Every secret, rotated</div>
+      <div class="desc">A breach of CircleCI's platform forced every customer to rotate every secret stored in their CI environment. Thousands of organizations scrambled to replace API keys, tokens, and credentials across their entire infrastructure &mdash; overnight.</div>
+    </incident-card>
+
+    <incident-card>
+      <div class="year">2022 &middot; Uber</div>
+      <div class="title">Hardcoded keys on a network share</div>
+      <div class="desc">An attacker social-engineered their way past MFA, then found PowerShell scripts on an internal file share containing hardcoded AWS credentials. Those keys unlocked access to Uber's cloud infrastructure and sensitive data stores.</div>
+    </incident-card>
+
+    <incident-card>
+      <div class="year">2022 &middot; Samsung</div>
+      <div class="title">Keys in the source code</div>
+      <div class="desc">Lapsus$ leaked Samsung's SmartThings source code. Buried in the repo: AWS keys, GitHub tokens, and Artifactory credentials &mdash; all in plaintext, all active.</div>
+    </incident-card>
+
+    <incident-card>
+      <div class="year">2021 &middot; Codecov</div>
+      <div class="title">Supply-chain key exfiltration</div>
+      <div class="desc">Attackers modified Codecov's Bash uploader to silently exfiltrate environment variables &mdash; including API keys &mdash; from the CI pipelines of thousands of companies. Two months went by before anyone noticed.</div>
+    </incident-card>
+
+    <incident-card>
+      <div class="year">2021 &middot; Twitch</div>
+      <div class="title">125 GB of secrets</div>
+      <div class="desc">Twitch's entire source code was leaked, complete with API keys and internal credentials scattered across the codebase. A 125 GB reminder that secrets in source code are only secret until they aren't.</div>
+    </incident-card>
+
+    <incident-card>
+      <div class="year">2018 &middot; Tesla</div>
+      <div class="title">Kubernetes to cryptomining</div>
+      <div class="desc">Attackers found Tesla's Kubernetes console exposed without authentication. Inside: AWS credentials. They used them to run cryptominers on Tesla's cloud bill.</div>
+    </incident-card>
+
+    <callout-box>
+      <strong>The scale of the problem:</strong> GitHub's secret scanning detects
+      millions of leaked secrets in public repositories every year. API keys are
+      the single most common type. If your authentication strategy depends on
+      nobody accidentally running <code>git push</code> with a secret in the
+      repo, your authentication strategy has already failed.
+    </callout-box>
+  </manifesto-section>
+
+  <!-- ── Why broken ────────────────────────────────────── -->
+  <manifesto-section>
+    <h2>Why API keys are fundamentally broken</h2>
+    <p>
+      This is not a tooling problem you can solve with secret scanners and
+      pre-commit hooks. API keys are architecturally flawed. They fail on every
+      property that a modern credential should have:
+    </p>
+    <ul class="broken-list">
+      <li><strong>No expiration</strong> &mdash; they live forever unless someone remembers to rotate them. Most don't.</li>
+      <li><strong>No scoping</strong> &mdash; one key, full access. You can't limit an API key to read-only, to one endpoint, or to one IP range (unless the provider bolted it on as an afterthought).</li>
+      <li><strong>No audit trail</strong> &mdash; who used this key? When? From where? For what? You'll never know. It's a bearer credential: whoever has the string has the access.</li>
+      <li><strong>Leaked in repos</strong> &mdash; the #1 type of secret found in public repositories. It's not a matter of <em>if</em>, but <em>when</em>.</li>
+      <li><strong>Shared secrets</strong> &mdash; both sides store the same secret. Compromise either side and you've compromised both.</li>
+      <li><strong>No standard rotation</strong> &mdash; every provider has a different rotation mechanism (if any). There is no protocol, no automation, no standard.</li>
+      <li><strong>No revocation granularity</strong> &mdash; need to revoke access for one consumer? Revoke the key and break every other consumer that shares it.</li>
+    </ul>
+  </manifesto-section>
+
+  <!-- ── What instead ──────────────────────────────────── -->
+  <manifesto-section>
+    <h2>What to use instead</h2>
+    <p>
+      The good news: better options exist and are widely supported. The right
+      choice depends on your use case:
+    </p>
+    <ul class="alt-list">
+      <li><strong>User-facing apps</strong> &mdash; OAuth 2.0 and OpenID Connect. Delegated access with scoped, time-limited tokens.</li>
+      <li><strong>Machine-to-machine (same cloud)</strong> &mdash; Workload identity. No secrets at all &mdash; the platform proves who you are.</li>
+      <li><strong>Machine-to-machine (cross-boundary)</strong> &mdash; mTLS, OAuth Client Credentials with private_key_jwt, or SPIFFE.</li>
+      <li><strong>Webhooks</strong> &mdash; HMAC signatures. The receiver can verify authenticity without storing a bearer credential.</li>
+    </ul>
+    <p>Not sure which one fits your setup?</p>
+    <p>
+      <a href="/decision-tree.html" class="cta-btn">Use our decision tree</a>
+      <a href="/hall-of-shame.html" class="cta-btn">Check the Hall of Shame</a>
+    </p>
+  </manifesto-section>
+
+  <!-- ── Industry consensus ────────────────────────────── -->
+  <manifesto-section>
+    <h2>The industry has moved on</h2>
+    <p>
+      This is not a fringe opinion. The biggest cloud providers actively
+      discourage their own API keys:
+    </p>
+    <ul class="industry-list">
+      <li><strong>AWS</strong> recommends IAM roles and instance profiles over access keys, and flags long-lived keys as a security finding.</li>
+      <li><strong>Google Cloud</strong> recommends workload identity federation and service account impersonation over service account keys.</li>
+      <li><strong>Azure</strong> recommends managed identities and has built keyless authentication into most of its services.</li>
+      <li><strong>GitHub</strong> offers OIDC tokens for Actions workflows and fine-grained tokens with expiration for personal use.</li>
+    </ul>
+    <p>
+      When the providers who <em>issue</em> API keys are telling you not to use
+      them, it might be time to listen.
+    </p>
+  </manifesto-section>
+
+  <!-- ── Footer ────────────────────────────────────────── -->
+  <site-footer>
+    <p>
+      <a href="/decision-tree.html">Decision Tree</a> &middot;
+      <a href="/hall-of-shame.html">Hall of Shame</a> &middot;
+      <a href="https://github.com/pedropaulovc/kill-api-keys">GitHub</a>
+    </p>
+  </site-footer>
+</page-container>
 </body>
 </html>
