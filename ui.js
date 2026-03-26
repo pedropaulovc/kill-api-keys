@@ -46,8 +46,8 @@ function render() {
     r.cons.forEach(c => { html += '<auth-tag con>' + c + '</auth-tag>'; });
     html += '</tag-row>';
     if (r.ask) {
-      html += '<div style="margin-top:16px;padding:12px 14px;background:var(--bg-info);border-radius:var(--radius-sm);font-size:0.8125rem;line-height:1.55;color:var(--text-info);">';
-      html += '<strong style="display:block;margin-bottom:4px;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;opacity:0.8;">What to ask the API provider</strong>';
+      html += '<div class="ask-box">';
+      html += '<strong>What to ask the API provider</strong>';
       html += r.ask;
       html += '</div>';
     }

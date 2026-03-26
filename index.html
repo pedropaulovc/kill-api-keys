@@ -3,173 +3,362 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stop Passing Around API Keys</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Kill API Keys &mdash; A Manifesto</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<page-container>
-  <site-nav role="navigation" aria-label="Site">
-    <a href="./" aria-current="page">Manifesto</a>
-    <a href="decision-tree.html">Decision Tree</a>
-    <a href="hall-of-shame.html">Hall of Shame</a>
-  </site-nav>
 
-  <!-- ── Hero ──────────────────────────────────────────── -->
-  <div class="hero">
-    <img src="/logo.svg" alt="Melting key" class="hero-logo" width="120" height="213">
-    <h1>Stop passing around API keys.</h1>
+<site-nav role="navigation" aria-label="Site">
+  <a href="./" aria-current="page">Manifesto</a>
+  <a href="decision-tree.html">Decision Tree</a>
+  <a href="hall-of-shame.html">Hall of Shame</a>
+</site-nav>
+
+<!-- ── Top ticker ─────────────────────────────────────── -->
+<div class="ticker ticker-danger">
+  <div class="ticker-inner">&#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE </div>
+</div>
+
+<!-- ── Hero ────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="scanline"></div>
+  <div class="hero-content">
+    <p class="hero-subtitle">A manifesto against insecure machine authentication</p>
+    <h1><span class="text-danger">KILL</span><br>API KEYS</h1>
     <p class="hero-lead">
-      They are the <strong>shared passwords of the machine world</strong>.
-      They don't expire. They can't be scoped. They leave no audit trail.
-      We stopped trusting passwords for humans years ago.
-      It is time to stop trusting them for machines.
+      Stop passing around API keys. They are the
+      <span class="text-danger">shared passwords</span>
+      of the machine world.
     </p>
+    <div class="hero-points">
+      <p>They don't expire.</p>
+      <p>They can't be scoped.</p>
+      <p>They leave no audit trail.</p>
+      <p class="bold">We stopped trusting passwords for humans years ago.<br>It's time to stop trusting them for machines.</p>
+    </div>
     <div class="hero-actions">
-      <a href="decision-tree.html" class="cta-btn">What should I use instead?</a>
-      <a href="hall-of-shame.html" class="cta-btn cta-btn-secondary">Who still forces API keys?</a>
+      <a href="#alternatives" class="cta-btn cta-primary">What should I use instead? &rarr;</a>
+      <a href="#hall-of-shame" class="cta-btn cta-secondary">Hall of Shame</a>
     </div>
   </div>
+</section>
 
-  <!-- ── Collapsible Q&A ───────────────────────────────── -->
-  <div class="faq">
+<!-- ── Bottom ticker ──────────────────────────────────── -->
+<div class="ticker ticker-warning">
+  <div class="ticker-inner">GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; </div>
+</div>
 
-    <details>
-      <summary>Has this actually caused real problems?</summary>
-      <div class="faq-body">
-        <p>Yes. Repeatedly. At scale.</p>
+<!-- ── Hall of Shame (breaches) ───────────────────────── -->
+<section id="hall-of-shame" class="section">
+  <div class="container">
+    <h2 class="section-title">Hall of <span style="color:var(--danger)">Shame</span></h2>
+    <p class="section-subtitle">Has this actually caused real problems? Yes. Repeatedly. At scale.</p>
 
-        <incident-card>
-          <div class="year">2023 &middot; CircleCI</div>
-          <div class="title">Every secret, rotated</div>
-          <div class="desc">A breach forced every CircleCI customer to rotate every secret in their CI environment. Thousands of organizations scrambled to replace API keys across their entire infrastructure &mdash; overnight.</div>
-        </incident-card>
-
-        <incident-card>
-          <div class="year">2022 &middot; Uber</div>
-          <div class="title">Hardcoded keys on a network share</div>
-          <div class="desc">An attacker social-engineered past MFA, then found PowerShell scripts containing hardcoded AWS credentials on an internal file share. Those keys unlocked Uber's cloud infrastructure.</div>
-        </incident-card>
-
-        <incident-card>
-          <div class="year">2022 &middot; Samsung</div>
-          <div class="title">Keys in the source code</div>
-          <div class="desc">Lapsus$ leaked SmartThings source code. Buried inside: AWS keys, GitHub tokens, Artifactory credentials &mdash; all plaintext, all active.</div>
-        </incident-card>
-
-        <incident-card>
-          <div class="year">2021 &middot; Codecov</div>
-          <div class="title">Supply-chain key exfiltration</div>
-          <div class="desc">Attackers modified Codecov's Bash uploader to silently exfiltrate environment variables &mdash; including API keys &mdash; from thousands of CI pipelines. Two months before anyone noticed.</div>
-        </incident-card>
-
-        <incident-card>
-          <div class="year">2021 &middot; Twitch</div>
-          <div class="title">125 GB of secrets</div>
-          <div class="desc">Twitch's entire source code was leaked, complete with API keys and credentials scattered throughout. 125 GB of proof that secrets in code are only secret until they aren't.</div>
-        </incident-card>
-
-        <incident-card>
-          <div class="year">2018 &middot; Tesla</div>
-          <div class="title">Kubernetes to cryptomining</div>
-          <div class="desc">Attackers found Tesla's Kubernetes console exposed without auth. Inside: AWS credentials. Used to run cryptominers on Tesla's cloud bill.</div>
-        </incident-card>
-
-        <callout-box>
-          <strong>The scale of the problem:</strong> GitHub detects millions of
-          leaked secrets in public repositories every year. API keys are the #1
-          type. If your security depends on nobody running
-          <code>git push</code> with a secret in the repo, it has already failed.
-        </callout-box>
+    <div class="breach-list">
+      <div class="breach-entry">
+        <span class="breach-year">2023</span>
+        <div>
+          <div class="breach-company">CircleCI</div>
+          <div class="breach-headline">Every secret, rotated</div>
+        </div>
+        <p class="breach-desc">A breach forced every CircleCI customer to rotate every secret in their CI environment. Thousands of organizations scrambled to replace API keys across their entire infrastructure &mdash; overnight.</p>
       </div>
-    </details>
 
-    <details>
-      <summary>What's actually wrong with API keys?</summary>
-      <div class="faq-body">
-        <p>This is not a tooling problem you can patch with secret scanners. API keys are architecturally broken:</p>
-        <ul class="broken-list">
-          <li><strong>No expiration</strong> &mdash; they live forever unless someone remembers to rotate them</li>
-          <li><strong>No scoping</strong> &mdash; one key, full access, all the time</li>
-          <li><strong>No audit trail</strong> &mdash; who used this key? When? From where? You'll never know</li>
-          <li><strong>Leaked in repos</strong> &mdash; the #1 secret type found in public repositories</li>
-          <li><strong>Shared secrets</strong> &mdash; both sides store the same value. Compromise either, compromise both</li>
-          <li><strong>No standard rotation</strong> &mdash; every provider does it differently, if at all</li>
-          <li><strong>No revocation granularity</strong> &mdash; revoke one consumer's access and break everyone else's</li>
-        </ul>
+      <div class="breach-entry">
+        <span class="breach-year">2022</span>
+        <div>
+          <div class="breach-company">Uber</div>
+          <div class="breach-headline">Hardcoded keys on a network share</div>
+        </div>
+        <p class="breach-desc">An attacker social-engineered past MFA, then found PowerShell scripts containing hardcoded AWS credentials on an internal file share. Those keys unlocked Uber's cloud infrastructure.</p>
       </div>
-    </details>
 
-    <details>
-      <summary>What should I use instead?</summary>
-      <div class="faq-body">
-        <ul class="alt-list">
-          <li><strong>User-facing apps</strong> &mdash; OAuth 2.0 / OpenID Connect. Scoped, time-limited, delegated.</li>
-          <li><strong>Machine-to-machine (same cloud)</strong> &mdash; Workload identity. Zero secrets.</li>
-          <li><strong>Machine-to-machine (cross-boundary)</strong> &mdash; mTLS, OAuth Client Credentials, or SPIFFE.</li>
-          <li><strong>Webhooks</strong> &mdash; HMAC signatures. No bearer credential needed.</li>
-        </ul>
-        <p>Not sure which fits? <a href="decision-tree.html">Use our interactive decision tree.</a></p>
+      <div class="breach-entry">
+        <span class="breach-year">2022</span>
+        <div>
+          <div class="breach-company">Samsung</div>
+          <div class="breach-headline">Keys in the source code</div>
+        </div>
+        <p class="breach-desc">Lapsus$ leaked SmartThings source code. Buried inside: AWS keys, GitHub tokens, Artifactory credentials &mdash; all plaintext, all active.</p>
       </div>
-    </details>
 
-    <details>
-      <summary>Has the industry actually moved on?</summary>
-      <div class="faq-body">
-        <p>The biggest cloud providers actively discourage their own API keys:</p>
-        <ul class="industry-list">
-          <li><strong>AWS</strong> recommends IAM roles over access keys and flags long-lived keys as a security finding</li>
-          <li><strong>Google Cloud</strong> recommends workload identity federation over service account keys</li>
-          <li><strong>Azure</strong> recommends managed identities and is deprecating shared key auth on storage</li>
-          <li><strong>GitHub</strong> offers OIDC for Actions and fine-grained tokens with expiration</li>
-        </ul>
-        <p>When the providers who <em>issue</em> API keys tell you not to use them, it is time to listen.</p>
+      <div class="breach-entry">
+        <span class="breach-year">2021</span>
+        <div>
+          <div class="breach-company">Codecov</div>
+          <div class="breach-headline">Supply-chain key exfiltration</div>
+        </div>
+        <p class="breach-desc">Attackers modified Codecov's Bash uploader to silently exfiltrate environment variables &mdash; including API keys &mdash; from thousands of CI pipelines. Two months before anyone noticed.</p>
       </div>
-    </details>
 
-    <details>
-      <summary>"But we've always done it this way"</summary>
-      <div class="faq-body">
-        <p>
-          We also used to <strong>telnet</strong> into production. We used to
-          <strong>FTP</strong> deploy by dragging files into a folder. We used to
-          email spreadsheets of shared passwords. The industry moved on from
-          every one of those, and nobody misses them.
-        </p>
-        <p>
-          API keys had their moment. That moment was 2008. We now have OAuth 2.0,
-          OIDC, workload identity, mTLS, and a dozen standards that don't require
-          you to copy-paste a secret into a <code>.env</code> file and pray.
-        </p>
+      <div class="breach-entry">
+        <span class="breach-year">2021</span>
+        <div>
+          <div class="breach-company">Twitch</div>
+          <div class="breach-headline">125 GB of secrets</div>
+        </div>
+        <p class="breach-desc">Twitch's entire source code was leaked, complete with API keys and credentials scattered throughout. 125 GB of proof that secrets in code are only secret until they aren't.</p>
       </div>
-    </details>
 
+      <div class="breach-entry">
+        <span class="breach-year">2018</span>
+        <div>
+          <div class="breach-company">Tesla</div>
+          <div class="breach-headline">Kubernetes to cryptomining</div>
+        </div>
+        <p class="breach-desc">Attackers found Tesla's Kubernetes console exposed without auth. Inside: AWS credentials. Used to run cryptominers on Tesla's cloud bill.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="text-danger">The scale of the problem:</span>
+      GitHub detects millions of leaked secrets in public repositories every year. API keys are the #1 type. If your security depends on nobody running
+      <code>git push</code>
+      with a secret in the repo, it has already failed.
+    </div>
   </div>
+</section>
 
-  <!-- ── Footer ────────────────────────────────────────── -->
-  <site-footer>
-    <p>
-      <a href="decision-tree.html">Decision Tree</a> &middot;
-      <a href="hall-of-shame.html">Hall of Shame</a> &middot;
-      <a href="https://github.com/pedropaulovc/kill-api-keys">GitHub</a>
-    </p>
-    <p>By <a href="https://bsky.app/profile/pedro.vza.net">Pedro Vezzá</a></p>
-    <details class="ai-attribution">
-      <summary>AIA PAI Nc Se Ce Hin R Claude v1.0</summary>
-      <div class="ai-attribution-body">
-        <p><strong>AIA Primarily AI-generated, New Content, Stylistic Edits, Content Edits, Human Initiated, Reviewed, Claude v1.0</strong></p>
-        <ul>
-          <li><strong>Primarily AI-generated</strong> &mdash; the work was primarily AI-generated</li>
-          <li><strong>New Content</strong> &mdash; AI was used to create new content, such as text, code, and ideas</li>
-          <li><strong>Stylistic Edits</strong> &mdash; AI was used to make stylistic edits, such as changes to structure, wording, and clarity</li>
-          <li><strong>Content Edits</strong> &mdash; AI was used to make content edits, such as changes to scope, information, and ideas</li>
-          <li><strong>Human Initiated</strong> &mdash; AI was prompted for its contributions</li>
-          <li><strong>Reviewed</strong> &mdash; AI-generated content was reviewed and approved</li>
-        </ul>
-        <p><a href="https://aiattribution.github.io/create-attribution">Create your own AI attribution.</a></p>
+<!-- ── What's broken ──────────────────────────────────── -->
+<section class="section section-muted">
+  <div class="container">
+    <h2 class="section-title">What's actually <span class="strikethrough-red">wrong</span> <span style="color:var(--danger)">broken</span></h2>
+    <p class="section-subtitle">This is not a tooling problem you can patch with secret scanners. API keys are architecturally broken:</p>
+
+    <div class="problems-grid">
+      <div class="problem-card">
+        <span class="problem-icon">&infin;</span>
+        <div class="problem-label">No expiration</div>
+        <p class="problem-desc">They live forever unless someone remembers to rotate them</p>
       </div>
-    </details>
-  </site-footer>
-</page-container>
+      <div class="problem-card">
+        <span class="problem-icon">&#128275;</span>
+        <div class="problem-label">No scoping</div>
+        <p class="problem-desc">One key, full access, all the time</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">&#128123;</span>
+        <div class="problem-label">No audit trail</div>
+        <p class="problem-desc">Who used this key? When? From where? You'll never know</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">&#128194;</span>
+        <div class="problem-label">Leaked in repos</div>
+        <p class="problem-desc">The #1 secret type found in public repositories</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">&#129309;</span>
+        <div class="problem-label">Shared secrets</div>
+        <p class="problem-desc">Both sides store the same value. Compromise either, compromise both</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">&#128260;</span>
+        <div class="problem-label">No standard rotation</div>
+        <p class="problem-desc">Every provider does it differently, if at all</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">&#128165;</span>
+        <div class="problem-label">No revocation granularity</div>
+        <p class="problem-desc">Revoke one consumer's access and break everyone else's</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Alternatives ────────────────────────────────────── -->
+<section id="alternatives" class="section">
+  <div class="container">
+    <h2 class="section-title">What should I use <span style="color:var(--safe)">instead?</span></h2>
+
+    <div class="alt-grid" style="margin-top:3rem">
+      <div class="alt-card">
+        <div class="alt-scenario">User-facing apps</div>
+        <div class="alt-solution">OAuth 2.0 / OpenID Connect</div>
+        <div class="alt-why">Scoped, time-limited, delegated.</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-scenario">Machine-to-machine (same cloud)</div>
+        <div class="alt-solution">Workload identity</div>
+        <div class="alt-why">Zero secrets.</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-scenario">Machine-to-machine (cross-boundary)</div>
+        <div class="alt-solution">mTLS, OAuth Client Credentials, or SPIFFE</div>
+        <div class="alt-why">Cryptographic identity, no bearer tokens.</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-scenario">Webhooks</div>
+        <div class="alt-solution">HMAC signatures</div>
+        <div class="alt-why">No bearer credential needed.</div>
+      </div>
+    </div>
+
+    <h3 class="provider-title">Has the industry actually moved on?</h3>
+    <p class="provider-subtitle">When the providers who <em>issue</em> API keys tell you not to use them, it's time to listen.</p>
+
+    <div class="provider-list">
+      <div class="provider-entry">
+        <span class="provider-name">AWS</span>
+        <p class="provider-quote">Recommends IAM roles over access keys and flags long-lived keys as a security finding</p>
+      </div>
+      <div class="provider-entry">
+        <span class="provider-name">Google Cloud</span>
+        <p class="provider-quote">Recommends workload identity federation over service account keys</p>
+      </div>
+      <div class="provider-entry">
+        <span class="provider-name">Azure</span>
+        <p class="provider-quote">Recommends managed identities and is deprecating shared key auth on storage</p>
+      </div>
+      <div class="provider-entry">
+        <span class="provider-name">GitHub</span>
+        <p class="provider-quote">Offers OIDC for Actions and fine-grained tokens with expiration</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Decision Tree ───────────────────────────────────── -->
+<section id="decision-tree" class="section section-muted">
+  <div class="container">
+    <h2 class="section-title">Decision <span style="color:var(--warning)">Tree</span></h2>
+    <p class="section-subtitle">Not sure which alternative fits? Walk through it.</p>
+    <div class="tree-box" id="inline-tree"></div>
+    <p style="margin-top:2rem;font-size:0.8125rem;color:var(--fg-muted)">
+      Need more detail? <a href="decision-tree.html" style="color:var(--warning);text-decoration:underline">Use the full interactive decision tree</a> with pros, cons, and provider-specific guidance.
+    </p>
+  </div>
+</section>
+
+<!-- ── Closing ─────────────────────────────────────────── -->
+<section class="closing">
+  <div class="container">
+    <h2 class="section-title" style="max-width:720px">"But we've always done it this way"</h2>
+    <div class="closing-body" style="margin-top:2rem">
+      <p>
+        We also used to <span class="strikethrough-red">telnet into production</span>.
+        We used to <span class="strikethrough-red">FTP deploy by dragging files into a folder</span>.
+        We used to <span class="strikethrough-red">email spreadsheets of shared passwords</span>.
+      </p>
+      <p>The industry moved on from every one of those, and nobody misses them.</p>
+      <p class="highlight">API keys had their moment. That moment was 2008.</p>
+      <p>
+        We now have OAuth 2.0, OIDC, workload identity, mTLS, and a dozen standards that don't require you to copy-paste a secret into a
+        <code>.env</code> file and pray.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────────── -->
+<site-footer>
+  <div class="footer-inner">
+    <div class="footer-author">By <span><a href="https://bsky.app/profile/pedro.vza.net">Pedro Vezz&aacute;</a></span></div>
+    <div class="footer-links">
+      <a href="decision-tree.html">Decision Tree</a>
+      <a href="hall-of-shame.html">Hall of Shame</a>
+      <a href="https://github.com/pedropaulovc/kill-api-keys">GitHub</a>
+    </div>
+  </div>
+  <details class="ai-attribution">
+    <summary>AIA PAI Nc Se Ce Hin R Claude v1.0</summary>
+    <div class="ai-attribution-body">
+      <p><strong>AIA Primarily AI-generated, New Content, Stylistic Edits, Content Edits, Human Initiated, Reviewed, Claude v1.0</strong></p>
+      <ul>
+        <li><strong>Primarily AI-generated</strong> &mdash; the work was primarily AI-generated</li>
+        <li><strong>New Content</strong> &mdash; AI was used to create new content, such as text, code, and ideas</li>
+        <li><strong>Stylistic Edits</strong> &mdash; AI was used to make stylistic edits, such as changes to structure, wording, and clarity</li>
+        <li><strong>Content Edits</strong> &mdash; AI was used to make content edits, such as changes to scope, information, and ideas</li>
+        <li><strong>Human Initiated</strong> &mdash; AI was prompted for its contributions</li>
+        <li><strong>Reviewed</strong> &mdash; AI-generated content was reviewed and approved</li>
+      </ul>
+      <p><a href="https://aiattribution.github.io/create-attribution">Create your own AI attribution.</a></p>
+    </div>
+  </details>
+</site-footer>
+
+<!-- ── Inline decision tree JS ─────────────────────────── -->
+<script>
+(function() {
+  var tree = {
+    start: {
+      question: "What are you authenticating?",
+      options: [
+        { label: "A user (human)", next: "user" },
+        { label: "A machine / service", next: "machine" },
+        { label: "A webhook", answer: "Use HMAC signatures. No bearer credential needed. The sender signs the payload; the receiver verifies." }
+      ]
+    },
+    user: {
+      question: "Is the user authenticating to your own app or a third-party?",
+      options: [
+        { label: "My own app", answer: "Use OAuth 2.0 / OpenID Connect with your own identity provider (or a managed one like Auth0, Clerk, Firebase Auth). Scoped, time-limited, delegated." },
+        { label: "A third-party API on behalf of the user", answer: "Use OAuth 2.0 with delegated authorization. The user grants scoped access; you get short-lived tokens. Never store their credentials." }
+      ]
+    },
+    machine: {
+      question: "Are both services in the same cloud environment?",
+      options: [
+        { label: "Yes, same cloud", answer: "Use workload identity (AWS IAM Roles, GCP Service Account impersonation, Azure Managed Identity). Zero secrets to manage." },
+        { label: "No, cross-boundary", next: "cross" }
+      ]
+    },
+    cross: {
+      question: "What kind of cross-boundary communication?",
+      options: [
+        { label: "Service-to-service API calls", answer: "Use OAuth 2.0 Client Credentials flow with short-lived tokens, or mTLS for mutual authentication. For service mesh: consider SPIFFE/SPIRE." },
+        { label: "CI/CD pipeline to cloud", answer: "Use OIDC federation (e.g., GitHub Actions OIDC \u2192 AWS/GCP/Azure). Your pipeline gets short-lived tokens with no stored secrets." }
+      ]
+    }
+  };
+
+  var currentNode = "start";
+  var answer = null;
+  var history = [];
+  var container = document.getElementById("inline-tree");
+
+  function renderTree() {
+    if (answer) {
+      container.innerHTML =
+        '<div class="tree-rec-label">\u2713 Recommendation</div>' +
+        '<p class="tree-rec-text">' + answer + '</p>' +
+        '<div class="tree-nav">' +
+          '<button class="tree-back" onclick="window._treeBack()">\u2190 Back</button>' +
+          '<button class="tree-reset" onclick="window._treeReset()">Start over</button>' +
+        '</div>';
+      return;
+    }
+
+    var node = tree[currentNode];
+    var html = '<p class="tree-question">' + node.question + '</p><div class="tree-options">';
+    node.options.forEach(function(opt, i) {
+      html += '<button class="tree-opt" onclick="window._treePick(' + i + ')">' + opt.label + '</button>';
+    });
+    html += '</div>';
+    if (history.length > 0) {
+      html += '<div class="tree-nav" style="margin-top:1.5rem"><button class="tree-back" onclick="window._treeBack()">\u2190 Back</button></div>';
+    }
+    container.innerHTML = html;
+  }
+
+  window._treePick = function(i) {
+    var opt = tree[currentNode].options[i];
+    if (opt.answer) { answer = opt.answer; }
+    else if (opt.next) { history.push(currentNode); currentNode = opt.next; }
+    renderTree();
+  };
+  window._treeBack = function() {
+    if (answer) { answer = null; }
+    else if (history.length > 0) { currentNode = history.pop(); }
+    renderTree();
+  };
+  window._treeReset = function() {
+    currentNode = "start"; answer = null; history = [];
+    renderTree();
+  };
+
+  renderTree();
+})();
+</script>
+
 </body>
 </html>
