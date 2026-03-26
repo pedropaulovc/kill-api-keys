@@ -600,3 +600,40 @@ site-footer a {
   text-decoration: none;
 }
 site-footer a:hover { text-decoration: underline; }
+.ai-attribution {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+.ai-attribution summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.03em;
+  list-style: none;
+}
+.ai-attribution summary::-webkit-details-marker { display: none; }
+.ai-attribution summary:hover { color: var(--text-secondary); }
+.ai-attribution-body {
+  margin-top: 0.5rem;
+  line-height: 1.55;
+}
+.ai-attribution-body p {
+  margin-bottom: 0.4rem;
+}
+.ai-attribution-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0;
+}
+.ai-attribution-body li {
+  padding: 2px 0;
+}
+.ai-attribution-body li strong {
+  color: var(--text-secondary);
+}
+.ai-attribution-body a {
+  color: var(--text-info);
+  text-decoration: none;
+}
+.ai-attribution-body a:hover { text-decoration: underline; }
