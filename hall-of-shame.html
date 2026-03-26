@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hall of Shame &mdash; Kill API Keys</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<page-container>
+  <site-nav role="navigation" aria-label="Site">
+    <a href="./">Manifesto</a>
+    <a href="decision-tree.html">Decision Tree</a>
+    <a href="hall-of-shame.html" aria-current="page">Hall of Shame</a>
+  </site-nav>
+
+  <page-header>
+    <header-tag>Clearinghouse</header-tag>
+    <h1>The Hall of Shame</h1>
+    <p>Which API providers still force you to use shared secrets? Services marked
+      in red only support API keys. Yellow means they offer better alternatives
+      but still default to keys. Green means they've moved on.</p>
+  </page-header>
+
+  <div id="shame-stats" class="shame-stats"></div>
+  <div id="filter-bar" class="filter-bar"></div>
+  <div id="shame-list"></div>
+
+  <site-footer>
+    <p>
+      Data wrong or missing? <a href="https://github.com/pedropaulovc/kill-api-keys/issues">Open an issue</a> and we'll update it.
+    </p>
+    <p>
+      <a href="./">Manifesto</a> &middot;
+      <a href="decision-tree.html">Decision Tree</a> &middot;
+      <a href="https://github.com/pedropaulovc/kill-api-keys">GitHub</a>
+    </p>
+    <p>By <a href="https://bsky.app/profile/pedro.vza.net">Pedro Vezzá</a></p>
+    <details class="ai-attribution">
+      <summary>AIA PAI Nc Se Ce Hin R Claude v1.0</summary>
+      <div class="ai-attribution-body">
+        <p><strong>AIA Primarily AI-generated, New Content, Stylistic Edits, Content Edits, Human Initiated, Reviewed, Claude v1.0</strong></p>
+        <ul>
+          <li><strong>Primarily AI-generated</strong> &mdash; the work was primarily AI-generated</li>
+          <li><strong>New Content</strong> &mdash; AI was used to create new content, such as text, code, and ideas</li>
+          <li><strong>Stylistic Edits</strong> &mdash; AI was used to make stylistic edits, such as changes to structure, wording, and clarity</li>
+          <li><strong>Content Edits</strong> &mdash; AI was used to make content edits, such as changes to scope, information, and ideas</li>
+          <li><strong>Human Initiated</strong> &mdash; AI was prompted for its contributions</li>
+          <li><strong>Reviewed</strong> &mdash; AI-generated content was reviewed and approved</li>
+        </ul>
+        <p><a href="https://aiattribution.github.io/create-attribution">Create your own AI attribution.</a></p>
+      </div>
+    </details>
+  </site-footer>
+</page-container>
+
+<script src="hall-of-shame-data.js"></script>
+<script src="hall-of-shame-ui.js"></script>
+</body>
+</html>
