@@ -1,84 +1,113 @@
 /* ── Shame-level computation ─────────────────────────────── */
 function shameLevel(svc) {
   if (!svc.authMethods.apiKeys) return "green";
-  const hasGood = Object.entries(svc.authMethods).some(
-    ([k, v]) => v && authMethodMeta[k] && authMethodMeta[k].good
-  );
+  var hasGood = Object.keys(svc.authMethods).some(function (k) {
+    return svc.authMethods[k] && authMethodMeta[k] && authMethodMeta[k].good;
+  });
   return hasGood ? "yellow" : "red";
 }
 
-const levelOrder = { red: 0, yellow: 1, green: 2 };
+var levelOrder = { red: 0, yellow: 1, green: 2 };
+
+/* ── Helpers ─────────────────────────────────────────────── */
+function el(tag, cls) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  return e;
+}
+
+function txt(tag, text, cls) {
+  var e = el(tag, cls);
+  e.textContent = text;
+  return e;
+}
 
 /* ── Rendering ───────────────────────────────────────────── */
-let activeCategory = "All";
+var activeCategory = "All";
 
 function renderStats(list) {
-  const total = list.length;
-  const redCount = list.filter(s => shameLevel(s) === "red").length;
-  const el = document.getElementById("shame-stats");
-  el.innerHTML =
-    "<strong>" + total + "</strong> services reviewed. " +
-    "<strong>" + redCount + "</strong> only support API keys.";
+  var total = list.length;
+  var redCount = list.filter(function (s) { return shameLevel(s) === "red"; }).length;
+  var container = document.getElementById("shame-stats");
+  container.innerHTML = "";
+  var b1 = document.createElement("strong");
+  b1.textContent = total;
+  var b2 = document.createElement("strong");
+  b2.textContent = redCount;
+  container.appendChild(b1);
+  container.appendChild(document.createTextNode(" services reviewed. "));
+  container.appendChild(b2);
+  container.appendChild(document.createTextNode(" only support API keys."));
 }
 
 function renderFilters() {
-  const categories = ["All"].concat(
-    [...new Set(services.map(s => s.category))].sort()
+  var categories = ["All"].concat(
+    Array.from(new Set(services.map(function (s) { return s.category; }))).sort()
   );
-  const bar = document.getElementById("filter-bar");
-  bar.innerHTML = categories.map(function (cat) {
-    return '<button class="filter-btn"' +
-      (cat === activeCategory ? ' aria-pressed="true"' : ' aria-pressed="false"') +
-      ' onclick="filterBy(\'' + cat.replace(/'/g, "\\'") + '\')">' +
-      cat + "</button>";
-  }).join("");
+  var bar = document.getElementById("filter-bar");
+  bar.innerHTML = "";
+  categories.forEach(function (cat) {
+    var btn = el("button", "filter-btn");
+    btn.textContent = cat;
+    btn.setAttribute("aria-pressed", cat === activeCategory ? "true" : "false");
+    btn.addEventListener("click", function () { filterBy(cat); });
+    bar.appendChild(btn);
+  });
 }
 
 function renderCards(list) {
-  const sorted = list.slice().sort(function (a, b) {
+  var sorted = list.slice().sort(function (a, b) {
     return (levelOrder[shameLevel(a)] - levelOrder[shameLevel(b)]) ||
       a.name.localeCompare(b.name);
   });
 
-  var html = "";
-  for (var i = 0; i < sorted.length; i++) {
-    var s = sorted[i];
+  var container = document.getElementById("shame-list");
+  container.innerHTML = "";
+
+  sorted.forEach(function (s) {
     var level = shameLevel(s);
+    var card = document.createElement("shame-card");
+    card.setAttribute("data-level", level);
 
-    html += '<shame-card data-level="' + level + '">';
-    html += '<div class="service-header">';
-    html += '<span class="service-name">' + s.name + "</span>";
-    html += '<span class="service-category">' + s.category + "</span>";
-    html += "</div>";
+    var header = el("div", "service-header");
+    header.appendChild(txt("span", s.name, "service-name"));
+    header.appendChild(txt("span", s.category, "service-category"));
+    card.appendChild(header);
 
-    html += '<div class="auth-methods">';
-    var methods = Object.keys(authMethodMeta);
-    for (var j = 0; j < methods.length; j++) {
-      var key = methods[j];
+    var methods = el("div", "auth-methods");
+    Object.keys(authMethodMeta).forEach(function (key) {
       var meta = authMethodMeta[key];
       var supported = s.authMethods[key];
+      var badge = document.createElement("shame-badge");
+      badge.textContent = meta.label;
       if (supported && !meta.good) {
-        html += "<shame-badge bad>" + meta.label + "</shame-badge>";
+        badge.setAttribute("bad", "");
       } else if (supported && meta.good) {
-        html += "<shame-badge supported>" + meta.label + "</shame-badge>";
+        badge.setAttribute("supported", "");
       } else {
-        html += "<shame-badge unsupported>" + meta.label + "</shame-badge>";
+        badge.setAttribute("unsupported", "");
       }
-    }
-    html += "</div>";
+      methods.appendChild(badge);
+    });
+    card.appendChild(methods);
 
     if (s.notes) {
-      html += '<div class="service-notes">' + s.notes;
-      if (s.docsUrl) {
-        html += ' <a href="' + s.docsUrl + '" target="_blank" rel="noopener">Docs</a>';
+      var notes = el("div", "service-notes");
+      notes.textContent = s.notes;
+      if (s.docsUrl && /^https?:\/\//.test(s.docsUrl)) {
+        notes.appendChild(document.createTextNode(" "));
+        var link = document.createElement("a");
+        link.href = s.docsUrl;
+        link.textContent = "Docs";
+        link.target = "_blank";
+        link.rel = "noopener";
+        notes.appendChild(link);
       }
-      html += "</div>";
+      card.appendChild(notes);
     }
 
-    html += "</shame-card>";
-  }
-
-  document.getElementById("shame-list").innerHTML = html;
+    container.appendChild(card);
+  });
 }
 
 function filterBy(cat) {
