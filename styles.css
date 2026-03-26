@@ -452,39 +452,50 @@ site-footer .footer-author {
   color: var(--fg-muted);
 }
 site-footer .footer-author span { color: var(--fg); }
-site-footer .footer-links {
+site-footer .footer-right {
   display: flex;
+  align-items: center;
   gap: 1.5rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
 }
-site-footer .footer-links a {
+site-footer .footer-link {
   color: var(--fg-muted);
   text-decoration: none;
   transition: color 0.15s;
 }
-site-footer .footer-links a:hover { color: var(--fg); }
+site-footer .footer-link:hover { color: var(--fg); }
 .ai-attribution {
-  margin-top: 0.75rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
   color: var(--fg-muted);
+  cursor: default;
 }
-.ai-attribution summary {
-  cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.03em;
-  list-style: none;
+.ai-attribution-icon { font-size: 0.875rem; line-height: 1; }
+.ai-attribution-label { letter-spacing: 0.03em; }
+.ai-attribution-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  width: 280px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  font-size: 0.6875rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  z-index: 50;
 }
-.ai-attribution summary::-webkit-details-marker { display: none; }
-.ai-attribution summary:hover { color: var(--fg); }
-.ai-attribution-body { margin-top: 0.5rem; line-height: 1.55; }
-.ai-attribution-body p { margin-bottom: 0.4rem; }
-.ai-attribution-body ul { list-style: none; padding: 0; margin: 0.4rem 0; }
-.ai-attribution-body li { padding: 2px 0; }
-.ai-attribution-body li strong { color: var(--fg-muted); }
-.ai-attribution-body a { color: var(--fg-muted); text-decoration: none; }
-.ai-attribution-body a:hover { color: var(--fg); }
+.ai-attribution-tooltip a { color: var(--fg-muted); text-decoration: underline; }
+.ai-attribution-tooltip a:hover { color: var(--fg); }
+.ai-attribution:hover .ai-attribution-tooltip,
+.ai-attribution:focus .ai-attribution-tooltip,
+.ai-attribution:focus-within .ai-attribution-tooltip { display: block; }
 
 /* ── Decision tree page ─────────────────────────────────── */
 page-container { display: block; max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
