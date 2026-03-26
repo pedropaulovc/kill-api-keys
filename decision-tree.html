@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>API Auth Decision Tree &mdash; Kill API Keys</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<site-nav role="navigation" aria-label="Site">
+  <a href="./">Manifesto</a>
+  <a href="decision-tree.html" aria-current="page">Decision Tree</a>
+  <a href="hall-of-shame.html">Hall of Shame</a>
+</site-nav>
+
 <page-container>
-  <site-nav role="navigation" aria-label="Site">
-    <a href="./">Manifesto</a>
-    <a href="decision-tree.html" aria-current="page">Decision Tree</a>
-    <a href="hall-of-shame.html">Hall of Shame</a>
-  </site-nav>
   <page-header>
     <header-tag>Interactive guide</header-tag>
     <h1>Choosing the right API auth</h1>
@@ -23,12 +23,14 @@
   <div id="tree"></div>
 
   <site-footer>
-    <p>
-      <a href="./">Manifesto</a> &middot;
-      <a href="hall-of-shame.html">Hall of Shame</a> &middot;
-      <a href="https://github.com/pedropaulovc/kill-api-keys">GitHub</a>
-    </p>
-    <p>By <a href="https://bsky.app/profile/pedro.vza.net">Pedro Vezzá</a></p>
+    <div class="footer-inner">
+      <div class="footer-author">By <span><a href="https://bsky.app/profile/pedro.vza.net">Pedro Vezz&aacute;</a></span></div>
+      <div class="footer-links">
+        <a href="./">Manifesto</a>
+        <a href="hall-of-shame.html">Hall of Shame</a>
+        <a href="https://github.com/pedropaulovc/kill-api-keys">GitHub</a>
+      </div>
+    </div>
     <details class="ai-attribution">
       <summary>AIA PAI Nc Se Ce Hin R Claude v1.0</summary>
       <div class="ai-attribution-body">
