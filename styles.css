@@ -73,8 +73,8 @@ site-nav a[aria-current="page"] { color: var(--danger); background: rgba(255,0,0
 }
 .ticker-danger { background: var(--danger); color: #fff; padding: 0.5rem 0; font-size: 0.875rem; }
 .ticker-warning { background: var(--warning); color: #000; padding: 0.25rem 0; font-size: 0.75rem; }
-.ticker-inner { display: inline-block; animation: marquee 20s linear infinite; }
-.ticker-warning .ticker-inner { animation-direction: reverse; }
+.ticker-inner { display: inline-block; animation: marquee 40s linear infinite; }
+.ticker-warning .ticker-inner { animation-direction: reverse; animation-duration: 45s; }
 
 /* ── Hero section ───────────────────────────────────────── */
 .hero {
