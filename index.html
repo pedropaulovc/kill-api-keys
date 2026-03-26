@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stop Passing Around API Keys</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,149 +16,134 @@
   </site-nav>
 
   <!-- ── Hero ──────────────────────────────────────────── -->
-  <div class="manifesto-hero">
+  <div class="hero">
     <h1>Stop passing around API keys.</h1>
-    <p class="subtitle">
-      API keys are shared secrets. They don't expire. They can't be scoped. They
-      leave no audit trail. They are the <strong>passwords of the machine
-      world</strong> &mdash; and we stopped trusting passwords for human
-      authentication years ago. It is time to stop trusting them for machines too.
+    <p class="hero-lead">
+      They are the <strong>shared passwords of the machine world</strong>.
+      They don't expire. They can't be scoped. They leave no audit trail.
+      We stopped trusting passwords for humans years ago.
+      It is time to stop trusting them for machines.
     </p>
+    <div class="hero-actions">
+      <a href="/decision-tree.html" class="cta-btn">What should I use instead?</a>
+      <a href="/hall-of-shame.html" class="cta-btn cta-btn-secondary">Who still forces API keys?</a>
+    </div>
   </div>
 
-  <!-- ── Objection ─────────────────────────────────────── -->
-  <manifesto-section>
-    <h2>"But we've always done it this way"</h2>
-    <p>
-      We also used to <strong>telnet</strong> into production boxes. We used to
-      <strong>FTP</strong> deploy by dragging files into a folder. We used to
-      email spreadsheets of shared passwords around the office. The industry
-      moved on from every single one of those practices, and nobody misses them.
-    </p>
-    <p>
-      API keys had their moment. That moment was roughly 2008. Fifteen-plus years
-      later we have OAuth 2.0, OpenID Connect, workload identity, mTLS, and a
-      dozen other standards that don't require you to copy-paste a secret into a
-      <code>.env</code> file and pray nobody commits it.
-    </p>
-    <p>
-      I am asking you &mdash; <strong>politely but firmly</strong> &mdash; to
-      stop using API keys. I have been asking since the first one leaked on
-      GitHub in 2012. Please. I am tired.
-    </p>
-  </manifesto-section>
+  <!-- ── Collapsible Q&A ───────────────────────────────── -->
+  <div class="faq">
 
-  <!-- ── Incidents ─────────────────────────────────────── -->
-  <manifesto-section>
-    <h2>The Incident Hall of Horrors</h2>
-    <p>
-      These are not hypothetical risks. These are real breaches, real money lost,
-      and real customer data exposed &mdash; all because somebody's API key ended
-      up where it shouldn't have been.
-    </p>
+    <details>
+      <summary>Has this actually caused real problems?</summary>
+      <div class="faq-body">
+        <p>Yes. Repeatedly. At scale.</p>
 
-    <incident-card>
-      <div class="year">2023 &middot; CircleCI</div>
-      <div class="title">Every secret, rotated</div>
-      <div class="desc">A breach of CircleCI's platform forced every customer to rotate every secret stored in their CI environment. Thousands of organizations scrambled to replace API keys, tokens, and credentials across their entire infrastructure &mdash; overnight.</div>
-    </incident-card>
+        <incident-card>
+          <div class="year">2023 &middot; CircleCI</div>
+          <div class="title">Every secret, rotated</div>
+          <div class="desc">A breach forced every CircleCI customer to rotate every secret in their CI environment. Thousands of organizations scrambled to replace API keys across their entire infrastructure &mdash; overnight.</div>
+        </incident-card>
 
-    <incident-card>
-      <div class="year">2022 &middot; Uber</div>
-      <div class="title">Hardcoded keys on a network share</div>
-      <div class="desc">An attacker social-engineered their way past MFA, then found PowerShell scripts on an internal file share containing hardcoded AWS credentials. Those keys unlocked access to Uber's cloud infrastructure and sensitive data stores.</div>
-    </incident-card>
+        <incident-card>
+          <div class="year">2022 &middot; Uber</div>
+          <div class="title">Hardcoded keys on a network share</div>
+          <div class="desc">An attacker social-engineered past MFA, then found PowerShell scripts containing hardcoded AWS credentials on an internal file share. Those keys unlocked Uber's cloud infrastructure.</div>
+        </incident-card>
 
-    <incident-card>
-      <div class="year">2022 &middot; Samsung</div>
-      <div class="title">Keys in the source code</div>
-      <div class="desc">Lapsus$ leaked Samsung's SmartThings source code. Buried in the repo: AWS keys, GitHub tokens, and Artifactory credentials &mdash; all in plaintext, all active.</div>
-    </incident-card>
+        <incident-card>
+          <div class="year">2022 &middot; Samsung</div>
+          <div class="title">Keys in the source code</div>
+          <div class="desc">Lapsus$ leaked SmartThings source code. Buried inside: AWS keys, GitHub tokens, Artifactory credentials &mdash; all plaintext, all active.</div>
+        </incident-card>
 
-    <incident-card>
-      <div class="year">2021 &middot; Codecov</div>
-      <div class="title">Supply-chain key exfiltration</div>
-      <div class="desc">Attackers modified Codecov's Bash uploader to silently exfiltrate environment variables &mdash; including API keys &mdash; from the CI pipelines of thousands of companies. Two months went by before anyone noticed.</div>
-    </incident-card>
+        <incident-card>
+          <div class="year">2021 &middot; Codecov</div>
+          <div class="title">Supply-chain key exfiltration</div>
+          <div class="desc">Attackers modified Codecov's Bash uploader to silently exfiltrate environment variables &mdash; including API keys &mdash; from thousands of CI pipelines. Two months before anyone noticed.</div>
+        </incident-card>
 
-    <incident-card>
-      <div class="year">2021 &middot; Twitch</div>
-      <div class="title">125 GB of secrets</div>
-      <div class="desc">Twitch's entire source code was leaked, complete with API keys and internal credentials scattered across the codebase. A 125 GB reminder that secrets in source code are only secret until they aren't.</div>
-    </incident-card>
+        <incident-card>
+          <div class="year">2021 &middot; Twitch</div>
+          <div class="title">125 GB of secrets</div>
+          <div class="desc">Twitch's entire source code was leaked, complete with API keys and credentials scattered throughout. 125 GB of proof that secrets in code are only secret until they aren't.</div>
+        </incident-card>
 
-    <incident-card>
-      <div class="year">2018 &middot; Tesla</div>
-      <div class="title">Kubernetes to cryptomining</div>
-      <div class="desc">Attackers found Tesla's Kubernetes console exposed without authentication. Inside: AWS credentials. They used them to run cryptominers on Tesla's cloud bill.</div>
-    </incident-card>
+        <incident-card>
+          <div class="year">2018 &middot; Tesla</div>
+          <div class="title">Kubernetes to cryptomining</div>
+          <div class="desc">Attackers found Tesla's Kubernetes console exposed without auth. Inside: AWS credentials. Used to run cryptominers on Tesla's cloud bill.</div>
+        </incident-card>
 
-    <callout-box>
-      <strong>The scale of the problem:</strong> GitHub's secret scanning detects
-      millions of leaked secrets in public repositories every year. API keys are
-      the single most common type. If your authentication strategy depends on
-      nobody accidentally running <code>git push</code> with a secret in the
-      repo, your authentication strategy has already failed.
-    </callout-box>
-  </manifesto-section>
+        <callout-box>
+          <strong>The scale of the problem:</strong> GitHub detects millions of
+          leaked secrets in public repositories every year. API keys are the #1
+          type. If your security depends on nobody running
+          <code>git push</code> with a secret in the repo, it has already failed.
+        </callout-box>
+      </div>
+    </details>
 
-  <!-- ── Why broken ────────────────────────────────────── -->
-  <manifesto-section>
-    <h2>Why API keys are fundamentally broken</h2>
-    <p>
-      This is not a tooling problem you can solve with secret scanners and
-      pre-commit hooks. API keys are architecturally flawed. They fail on every
-      property that a modern credential should have:
-    </p>
-    <ul class="broken-list">
-      <li><strong>No expiration</strong> &mdash; they live forever unless someone remembers to rotate them. Most don't.</li>
-      <li><strong>No scoping</strong> &mdash; one key, full access. You can't limit an API key to read-only, to one endpoint, or to one IP range (unless the provider bolted it on as an afterthought).</li>
-      <li><strong>No audit trail</strong> &mdash; who used this key? When? From where? For what? You'll never know. It's a bearer credential: whoever has the string has the access.</li>
-      <li><strong>Leaked in repos</strong> &mdash; the #1 type of secret found in public repositories. It's not a matter of <em>if</em>, but <em>when</em>.</li>
-      <li><strong>Shared secrets</strong> &mdash; both sides store the same secret. Compromise either side and you've compromised both.</li>
-      <li><strong>No standard rotation</strong> &mdash; every provider has a different rotation mechanism (if any). There is no protocol, no automation, no standard.</li>
-      <li><strong>No revocation granularity</strong> &mdash; need to revoke access for one consumer? Revoke the key and break every other consumer that shares it.</li>
-    </ul>
-  </manifesto-section>
+    <details>
+      <summary>What's actually wrong with API keys?</summary>
+      <div class="faq-body">
+        <p>This is not a tooling problem you can patch with secret scanners. API keys are architecturally broken:</p>
+        <ul class="broken-list">
+          <li><strong>No expiration</strong> &mdash; they live forever unless someone remembers to rotate them</li>
+          <li><strong>No scoping</strong> &mdash; one key, full access, all the time</li>
+          <li><strong>No audit trail</strong> &mdash; who used this key? When? From where? You'll never know</li>
+          <li><strong>Leaked in repos</strong> &mdash; the #1 secret type found in public repositories</li>
+          <li><strong>Shared secrets</strong> &mdash; both sides store the same value. Compromise either, compromise both</li>
+          <li><strong>No standard rotation</strong> &mdash; every provider does it differently, if at all</li>
+          <li><strong>No revocation granularity</strong> &mdash; revoke one consumer's access and break everyone else's</li>
+        </ul>
+      </div>
+    </details>
 
-  <!-- ── What instead ──────────────────────────────────── -->
-  <manifesto-section>
-    <h2>What to use instead</h2>
-    <p>
-      The good news: better options exist and are widely supported. The right
-      choice depends on your use case:
-    </p>
-    <ul class="alt-list">
-      <li><strong>User-facing apps</strong> &mdash; OAuth 2.0 and OpenID Connect. Delegated access with scoped, time-limited tokens.</li>
-      <li><strong>Machine-to-machine (same cloud)</strong> &mdash; Workload identity. No secrets at all &mdash; the platform proves who you are.</li>
-      <li><strong>Machine-to-machine (cross-boundary)</strong> &mdash; mTLS, OAuth Client Credentials with private_key_jwt, or SPIFFE.</li>
-      <li><strong>Webhooks</strong> &mdash; HMAC signatures. The receiver can verify authenticity without storing a bearer credential.</li>
-    </ul>
-    <p>Not sure which one fits your setup?</p>
-    <p>
-      <a href="/decision-tree.html" class="cta-btn">Use our decision tree</a>
-      <a href="/hall-of-shame.html" class="cta-btn">Check the Hall of Shame</a>
-    </p>
-  </manifesto-section>
+    <details>
+      <summary>What should I use instead?</summary>
+      <div class="faq-body">
+        <ul class="alt-list">
+          <li><strong>User-facing apps</strong> &mdash; OAuth 2.0 / OpenID Connect. Scoped, time-limited, delegated.</li>
+          <li><strong>Machine-to-machine (same cloud)</strong> &mdash; Workload identity. Zero secrets.</li>
+          <li><strong>Machine-to-machine (cross-boundary)</strong> &mdash; mTLS, OAuth Client Credentials, or SPIFFE.</li>
+          <li><strong>Webhooks</strong> &mdash; HMAC signatures. No bearer credential needed.</li>
+        </ul>
+        <p>Not sure which fits? <a href="/decision-tree.html">Use our interactive decision tree.</a></p>
+      </div>
+    </details>
 
-  <!-- ── Industry consensus ────────────────────────────── -->
-  <manifesto-section>
-    <h2>The industry has moved on</h2>
-    <p>
-      This is not a fringe opinion. The biggest cloud providers actively
-      discourage their own API keys:
-    </p>
-    <ul class="industry-list">
-      <li><strong>AWS</strong> recommends IAM roles and instance profiles over access keys, and flags long-lived keys as a security finding.</li>
-      <li><strong>Google Cloud</strong> recommends workload identity federation and service account impersonation over service account keys.</li>
-      <li><strong>Azure</strong> recommends managed identities and has built keyless authentication into most of its services.</li>
-      <li><strong>GitHub</strong> offers OIDC tokens for Actions workflows and fine-grained tokens with expiration for personal use.</li>
-    </ul>
-    <p>
-      When the providers who <em>issue</em> API keys are telling you not to use
-      them, it might be time to listen.
-    </p>
-  </manifesto-section>
+    <details>
+      <summary>Has the industry actually moved on?</summary>
+      <div class="faq-body">
+        <p>The biggest cloud providers actively discourage their own API keys:</p>
+        <ul class="industry-list">
+          <li><strong>AWS</strong> recommends IAM roles over access keys and flags long-lived keys as a security finding</li>
+          <li><strong>Google Cloud</strong> recommends workload identity federation over service account keys</li>
+          <li><strong>Azure</strong> recommends managed identities and is deprecating shared key auth on storage</li>
+          <li><strong>GitHub</strong> offers OIDC for Actions and fine-grained tokens with expiration</li>
+        </ul>
+        <p>When the providers who <em>issue</em> API keys tell you not to use them, it is time to listen.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>"But we've always done it this way"</summary>
+      <div class="faq-body">
+        <p>
+          We also used to <strong>telnet</strong> into production. We used to
+          <strong>FTP</strong> deploy by dragging files into a folder. We used to
+          email spreadsheets of shared passwords. The industry moved on from
+          every one of those, and nobody misses them.
+        </p>
+        <p>
+          API keys had their moment. That moment was 2008. We now have OAuth 2.0,
+          OIDC, workload identity, mTLS, and a dozen standards that don't require
+          you to copy-paste a secret into a <code>.env</code> file and pray.
+        </p>
+      </div>
+    </details>
+
+  </div>
 
   <!-- ── Footer ────────────────────────────────────────── -->
   <site-footer>
