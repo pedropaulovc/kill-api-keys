@@ -15,14 +15,14 @@
 </site-nav>
 
 <!-- ── Top ticker ─────────────────────────────────────── -->
-<div class="ticker ticker-danger">
-  <div class="ticker-inner">&#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE </div>
-</div>
+<ticker-danger>
+  <ticker-inner>&#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE &#9888; STOP USING API KEYS &#9888; THEY ARE BROKEN BY DESIGN &#9888; ROTATE OR DIE &#9888; LEAKED SECRETS EVERYWHERE </ticker-inner>
+</ticker-danger>
 
 <!-- ── Hero ────────────────────────────────────────────── -->
 <section class="hero">
-  <div class="scanline"></div>
-  <div class="hero-content">
+  <scan-line></scan-line>
+  <hero-content>
     <p class="hero-subtitle">A manifesto against insecure machine authentication</p>
     <h1><span class="text-danger">KILL</span><br>API KEYS</h1>
     <p class="hero-lead">
@@ -30,210 +30,210 @@
       <span class="text-danger">shared passwords</span>
       of the machine world.
     </p>
-    <div class="hero-points">
+    <hero-points>
       <p>They don't expire.</p>
       <p>They can't be scoped.</p>
       <p>They leave no audit trail.</p>
       <p class="bold">We stopped trusting passwords for humans years ago.<br>It's time to stop trusting them for machines.</p>
-    </div>
-    <div class="hero-actions">
+    </hero-points>
+    <hero-actions>
       <a href="#alternatives" class="cta-btn cta-primary">What should I use instead? &rarr;</a>
       <a href="#hall-of-shame" class="cta-btn cta-secondary">Hall of Shame</a>
-    </div>
-  </div>
+    </hero-actions>
+  </hero-content>
 </section>
 
 <!-- ── Bottom ticker ──────────────────────────────────── -->
-<div class="ticker ticker-warning">
-  <div class="ticker-inner">GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; </div>
-</div>
+<ticker-warning>
+  <ticker-inner>GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; GitHub detects MILLIONS of leaked secrets in public repos every year &bull; API keys are the #1 type &bull; </ticker-inner>
+</ticker-warning>
 
 <!-- ── Hall of Shame (breaches) ───────────────────────── -->
 <section id="hall-of-shame" class="section">
-  <div class="container">
+  <content-wrap>
     <h2 class="section-title">Hall of <span style="color:var(--danger)">Shame</span></h2>
     <p class="section-subtitle">Has this actually caused real problems? Yes. Repeatedly. At scale.</p>
 
-    <div class="breach-list">
-      <div class="breach-entry">
-        <span class="breach-year">2023</span>
+    <breach-list>
+      <breach-entry>
+        <breach-year>2023</breach-year>
         <div>
-          <div class="breach-company">CircleCI</div>
-          <div class="breach-headline">Every secret, rotated</div>
+          <breach-company>CircleCI</breach-company>
+          <breach-headline>Every secret, rotated</breach-headline>
         </div>
         <p class="breach-desc">A breach forced every CircleCI customer to rotate every secret in their CI environment. Thousands of organizations scrambled to replace API keys across their entire infrastructure &mdash; overnight.</p>
-      </div>
+      </breach-entry>
 
-      <div class="breach-entry">
-        <span class="breach-year">2022</span>
+      <breach-entry>
+        <breach-year>2022</breach-year>
         <div>
-          <div class="breach-company">Uber</div>
-          <div class="breach-headline">Hardcoded keys on a network share</div>
+          <breach-company>Uber</breach-company>
+          <breach-headline>Hardcoded keys on a network share</breach-headline>
         </div>
         <p class="breach-desc">An attacker social-engineered past MFA, then found PowerShell scripts containing hardcoded AWS credentials on an internal file share. Those keys unlocked Uber's cloud infrastructure.</p>
-      </div>
+      </breach-entry>
 
-      <div class="breach-entry">
-        <span class="breach-year">2022</span>
+      <breach-entry>
+        <breach-year>2022</breach-year>
         <div>
-          <div class="breach-company">Samsung</div>
-          <div class="breach-headline">Keys in the source code</div>
+          <breach-company>Samsung</breach-company>
+          <breach-headline>Keys in the source code</breach-headline>
         </div>
         <p class="breach-desc">Lapsus$ leaked SmartThings source code. Buried inside: AWS keys, GitHub tokens, Artifactory credentials &mdash; all plaintext, all active.</p>
-      </div>
+      </breach-entry>
 
-      <div class="breach-entry">
-        <span class="breach-year">2021</span>
+      <breach-entry>
+        <breach-year>2021</breach-year>
         <div>
-          <div class="breach-company">Codecov</div>
-          <div class="breach-headline">Supply-chain key exfiltration</div>
+          <breach-company>Codecov</breach-company>
+          <breach-headline>Supply-chain key exfiltration</breach-headline>
         </div>
         <p class="breach-desc">Attackers modified Codecov's Bash uploader to silently exfiltrate environment variables &mdash; including API keys &mdash; from thousands of CI pipelines. Two months before anyone noticed.</p>
-      </div>
+      </breach-entry>
 
-      <div class="breach-entry">
-        <span class="breach-year">2021</span>
+      <breach-entry>
+        <breach-year>2021</breach-year>
         <div>
-          <div class="breach-company">Twitch</div>
-          <div class="breach-headline">125 GB of secrets</div>
+          <breach-company>Twitch</breach-company>
+          <breach-headline>125 GB of secrets</breach-headline>
         </div>
         <p class="breach-desc">Twitch's entire source code was leaked, complete with API keys and credentials scattered throughout. 125 GB of proof that secrets in code are only secret until they aren't.</p>
-      </div>
+      </breach-entry>
 
-      <div class="breach-entry">
-        <span class="breach-year">2018</span>
+      <breach-entry>
+        <breach-year>2018</breach-year>
         <div>
-          <div class="breach-company">Tesla</div>
-          <div class="breach-headline">Kubernetes to cryptomining</div>
+          <breach-company>Tesla</breach-company>
+          <breach-headline>Kubernetes to cryptomining</breach-headline>
         </div>
         <p class="breach-desc">Attackers found Tesla's Kubernetes console exposed without auth. Inside: AWS credentials. Used to run cryptominers on Tesla's cloud bill.</p>
-      </div>
-    </div>
+      </breach-entry>
+    </breach-list>
 
-    <div class="callout">
+    <call-out>
       <span class="text-danger">The scale of the problem:</span>
       GitHub detects millions of leaked secrets in public repositories every year. API keys are the #1 type. If your security depends on nobody running
       <code>git push</code>
       with a secret in the repo, it has already failed.
-    </div>
-  </div>
+    </call-out>
+  </content-wrap>
 </section>
 
 <!-- ── What's broken ──────────────────────────────────── -->
 <section class="section section-muted">
-  <div class="container">
+  <content-wrap>
     <h2 class="section-title">What's actually <span class="strikethrough-red">wrong</span> <span style="color:var(--danger)">broken</span></h2>
     <p class="section-subtitle">This is not a tooling problem you can patch with secret scanners. API keys are architecturally broken:</p>
 
-    <div class="problems-grid">
-      <div class="problem-card">
-        <span class="problem-icon">&infin;</span>
-        <div class="problem-label">No expiration</div>
+    <problems-grid>
+      <problem-card>
+        <problem-icon>&infin;</problem-icon>
+        <problem-label>No expiration</problem-label>
         <p class="problem-desc">They live forever unless someone remembers to rotate them</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">&#128275;</span>
-        <div class="problem-label">No scoping</div>
+      </problem-card>
+      <problem-card>
+        <problem-icon>&#128275;</problem-icon>
+        <problem-label>No scoping</problem-label>
         <p class="problem-desc">One key, full access, all the time</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">&#128123;</span>
-        <div class="problem-label">No audit trail</div>
+      </problem-card>
+      <problem-card>
+        <problem-icon>&#128123;</problem-icon>
+        <problem-label>No audit trail</problem-label>
         <p class="problem-desc">Who used this key? When? From where? You'll never know</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">&#128194;</span>
-        <div class="problem-label">Leaked in repos</div>
+      </problem-card>
+      <problem-card>
+        <problem-icon>&#128194;</problem-icon>
+        <problem-label>Leaked in repos</problem-label>
         <p class="problem-desc">The #1 secret type found in public repositories</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">&#129309;</span>
-        <div class="problem-label">Shared secrets</div>
+      </problem-card>
+      <problem-card>
+        <problem-icon>&#129309;</problem-icon>
+        <problem-label>Shared secrets</problem-label>
         <p class="problem-desc">Both sides store the same value. Compromise either, compromise both</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">&#128260;</span>
-        <div class="problem-label">No standard rotation</div>
+      </problem-card>
+      <problem-card>
+        <problem-icon>&#128260;</problem-icon>
+        <problem-label>No standard rotation</problem-label>
         <p class="problem-desc">Every provider does it differently, if at all</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">&#128165;</span>
-        <div class="problem-label">No revocation granularity</div>
+      </problem-card>
+      <problem-card>
+        <problem-icon>&#128165;</problem-icon>
+        <problem-label>No revocation granularity</problem-label>
         <p class="problem-desc">Revoke one consumer's access and break everyone else's</p>
-      </div>
-    </div>
-  </div>
+      </problem-card>
+    </problems-grid>
+  </content-wrap>
 </section>
 
 <!-- ── Alternatives ────────────────────────────────────── -->
 <section id="alternatives" class="section">
-  <div class="container">
+  <content-wrap>
     <h2 class="section-title">What should I use <span style="color:var(--safe)">instead?</span></h2>
 
-    <div class="alt-grid" style="margin-top:3rem">
-      <div class="alt-card">
-        <div class="alt-scenario">User-facing apps</div>
-        <div class="alt-solution">OAuth 2.0 / OpenID Connect</div>
-        <div class="alt-why">Scoped, time-limited, delegated.</div>
-      </div>
-      <div class="alt-card">
-        <div class="alt-scenario">Machine-to-machine (same cloud)</div>
-        <div class="alt-solution">Workload identity</div>
-        <div class="alt-why">Zero secrets.</div>
-      </div>
-      <div class="alt-card">
-        <div class="alt-scenario">Machine-to-machine (cross-boundary)</div>
-        <div class="alt-solution">mTLS, OAuth Client Credentials, or SPIFFE</div>
-        <div class="alt-why">Cryptographic identity, no bearer tokens.</div>
-      </div>
-      <div class="alt-card">
-        <div class="alt-scenario">Webhooks</div>
-        <div class="alt-solution">HMAC signatures</div>
-        <div class="alt-why">No bearer credential needed.</div>
-      </div>
-    </div>
+    <alt-grid style="margin-top:3rem">
+      <alt-card>
+        <alt-scenario>User-facing apps</alt-scenario>
+        <alt-solution>OAuth 2.0 / OpenID Connect</alt-solution>
+        <alt-why>Scoped, time-limited, delegated.</alt-why>
+      </alt-card>
+      <alt-card>
+        <alt-scenario>Machine-to-machine (same cloud)</alt-scenario>
+        <alt-solution>Workload identity</alt-solution>
+        <alt-why>Zero secrets.</alt-why>
+      </alt-card>
+      <alt-card>
+        <alt-scenario>Machine-to-machine (cross-boundary)</alt-scenario>
+        <alt-solution>mTLS, OAuth Client Credentials, or SPIFFE</alt-solution>
+        <alt-why>Cryptographic identity, no bearer tokens.</alt-why>
+      </alt-card>
+      <alt-card>
+        <alt-scenario>Webhooks</alt-scenario>
+        <alt-solution>HMAC signatures</alt-solution>
+        <alt-why>No bearer credential needed.</alt-why>
+      </alt-card>
+    </alt-grid>
 
     <h3 class="provider-title">Has the industry actually moved on?</h3>
     <p class="provider-subtitle">When the providers who <em>issue</em> API keys tell you not to use them, it's time to listen.</p>
 
-    <div class="provider-list">
-      <div class="provider-entry">
-        <span class="provider-name">AWS</span>
+    <provider-list>
+      <provider-entry>
+        <provider-name>AWS</provider-name>
         <p class="provider-quote">Recommends IAM roles over access keys and flags long-lived keys as a security finding</p>
-      </div>
-      <div class="provider-entry">
-        <span class="provider-name">Google Cloud</span>
+      </provider-entry>
+      <provider-entry>
+        <provider-name>Google Cloud</provider-name>
         <p class="provider-quote">Recommends workload identity federation over service account keys</p>
-      </div>
-      <div class="provider-entry">
-        <span class="provider-name">Azure</span>
+      </provider-entry>
+      <provider-entry>
+        <provider-name>Azure</provider-name>
         <p class="provider-quote">Recommends managed identities and is deprecating shared key auth on storage</p>
-      </div>
-      <div class="provider-entry">
-        <span class="provider-name">GitHub</span>
+      </provider-entry>
+      <provider-entry>
+        <provider-name>GitHub</provider-name>
         <p class="provider-quote">Offers OIDC for Actions and fine-grained tokens with expiration</p>
-      </div>
-    </div>
-  </div>
+      </provider-entry>
+    </provider-list>
+  </content-wrap>
 </section>
 
 <!-- ── Decision Tree ───────────────────────────────────── -->
 <section id="decision-tree" class="section section-muted">
-  <div class="container">
+  <content-wrap>
     <h2 class="section-title">Decision <span style="color:var(--warning)">Tree</span></h2>
     <p class="section-subtitle">Not sure which alternative fits? Walk through it.</p>
-    <div class="tree-box" id="inline-tree"></div>
+    <tree-box id="inline-tree"></tree-box>
     <p style="margin-top:2rem;font-size:0.8125rem;color:var(--fg-muted)">
       Need more detail? <a href="decision-tree.html" style="color:var(--warning);text-decoration:underline">Use the full interactive decision tree</a> with pros, cons, and provider-specific guidance.
     </p>
-  </div>
+  </content-wrap>
 </section>
 
 <!-- ── Closing ─────────────────────────────────────────── -->
 <section class="closing">
-  <div class="container">
+  <content-wrap>
     <h2 class="section-title" style="max-width:720px">"But we've always done it this way"</h2>
-    <div class="closing-body" style="margin-top:2rem">
+    <closing-body style="margin-top:2rem">
       <p>
         We also used to <span class="strikethrough-red">telnet into production</span>.
         We used to <span class="strikethrough-red">FTP deploy by dragging files into a folder</span>.
@@ -245,23 +245,23 @@
         We now have OAuth 2.0, OIDC, workload identity, mTLS, and a dozen standards that don't require you to copy-paste a secret into a
         <code>.env</code> file and pray.
       </p>
-    </div>
-  </div>
+    </closing-body>
+  </content-wrap>
 </section>
 
 <!-- ── Footer ──────────────────────────────────────────── -->
 <site-footer>
-  <div class="footer-inner">
-    <div class="footer-author">By <span><a href="https://bsky.app/profile/pedro.vza.net">Pedro Vezza</a></span></div>
-    <div class="footer-right">
+  <footer-inner>
+    <footer-author>By <span><a href="https://bsky.app/profile/pedro.vza.net">Pedro Vezza</a></span></footer-author>
+    <footer-right>
       <a href="https://github.com/pedropaulovc/kill-api-keys" class="footer-link">GitHub</a>
       <span class="ai-attribution" tabindex="0">
         <span class="ai-attribution-icon">&#9432;</span>
         <span class="ai-attribution-label">AI-assisted</span>
         <span class="ai-attribution-tooltip">Primarily AI-generated content using Claude Opus 4.6 and Lovable, human-initiated and reviewed. <a href="https://aiattribution.github.io/create-attribution">AIA standard</a></span>
       </span>
-    </div>
-  </div>
+    </footer-right>
+  </footer-inner>
 </site-footer>
 
 <!-- ── Inline decision tree JS ─────────────────────────── -->
