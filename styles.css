@@ -1,5 +1,5 @@
 /* ── Fonts ───────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Tint&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 /* ── Base tokens ────────────────────────────────────────── */
 :root {
@@ -16,6 +16,12 @@
 
   --font-mono: 'Space Mono', monospace;
   --font-display: 'Space Grotesk', sans-serif;
+  --font-title: 'Bungee Tint', system-ui;
+}
+
+@font-palette-values --tint-white {
+  font-family: 'Bungee Tint';
+  override-colors: 0 #fff, 1 hsl(0 0% 20%);
 }
 
 /* ── Reset ──────────────────────────────────────────────── */
@@ -128,14 +134,15 @@ hero-content {
   margin-bottom: 1.5rem;
 }
 .hero h1 {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 12vw, 10rem);
-  font-weight: 700;
+  font-family: var(--font-title);
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 400;
   line-height: 1;
-  letter-spacing: -0.05em;
+  letter-spacing: 0;
   margin-bottom: 2rem;
+  font-palette: --tint-white;
 }
-.hero h1 .text-danger { color: var(--danger); animation: glitch 3s infinite; }
+.hero h1 .text-danger { font-palette: normal; animation: glitch 3s infinite; }
 .hero-lead {
   font-family: var(--font-display);
   font-size: 1.5rem;
