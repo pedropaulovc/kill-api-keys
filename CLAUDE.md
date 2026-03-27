@@ -26,10 +26,9 @@ pnpm dev              # local dev server (npx serve .)
 
 Multi-page static site (HTML + CSS + vanilla JS, no build pipeline).
 
-Three pages: a manifesto against API keys, an interactive decision tree for choosing the right auth method, and a "Hall of Shame" clearinghouse of services and their auth support.
+Two pages: a manifesto against API keys (with an inline interactive decision tree for choosing the right auth method), and a "Hall of Shame" clearinghouse of services and their auth support.
 
-- `index.html` — manifesto homepage (static content, no JS)
-- `decision-tree.html` — interactive decision tree page
+- `index.html` — manifesto homepage with interactive decision tree
 - `hall-of-shame.html` — services clearinghouse page
 - `styles.css` — shared stylesheet (design tokens, components, page-specific styles)
 - `decision-tree.js` — decision tree data (`allNodes` questions and `results` recommendations)
