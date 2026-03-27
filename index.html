@@ -172,67 +172,13 @@
   </content-wrap>
 </section>
 
-<!-- ── Alternatives ────────────────────────────────────── -->
+<!-- ── What should I use instead? (Decision Tree) ─────── -->
 <section id="alternatives" class="section">
   <content-wrap>
     <h2 class="section-title">What should I use <span style="color:var(--safe)">instead?</span></h2>
-
-    <alt-grid style="margin-top:3rem">
-      <alt-card>
-        <alt-scenario>User-facing apps</alt-scenario>
-        <alt-solution>OAuth 2.0 / OpenID Connect</alt-solution>
-        <alt-why>Scoped, time-limited, delegated.</alt-why>
-      </alt-card>
-      <alt-card>
-        <alt-scenario>Machine-to-machine (same cloud)</alt-scenario>
-        <alt-solution>Workload identity</alt-solution>
-        <alt-why>Zero secrets.</alt-why>
-      </alt-card>
-      <alt-card>
-        <alt-scenario>Machine-to-machine (cross-boundary)</alt-scenario>
-        <alt-solution>mTLS, OAuth Client Credentials, or SPIFFE</alt-solution>
-        <alt-why>Cryptographic identity, no bearer tokens.</alt-why>
-      </alt-card>
-      <alt-card>
-        <alt-scenario>Webhooks</alt-scenario>
-        <alt-solution>HMAC signatures</alt-solution>
-        <alt-why>No bearer credential needed.</alt-why>
-      </alt-card>
-    </alt-grid>
-
-    <h3 class="provider-title">Has the industry actually moved on?</h3>
-    <p class="provider-subtitle">When the providers who <em>issue</em> API keys tell you not to use them, it's time to listen.</p>
-
-    <provider-list>
-      <provider-entry>
-        <provider-name>AWS</provider-name>
-        <p class="provider-quote">Recommends IAM roles over access keys and flags long-lived keys as a security finding</p>
-      </provider-entry>
-      <provider-entry>
-        <provider-name>Google Cloud</provider-name>
-        <p class="provider-quote">Recommends workload identity federation over service account keys</p>
-      </provider-entry>
-      <provider-entry>
-        <provider-name>Azure</provider-name>
-        <p class="provider-quote">Recommends managed identities and is deprecating shared key auth on storage</p>
-      </provider-entry>
-      <provider-entry>
-        <provider-name>GitHub</provider-name>
-        <p class="provider-quote">Offers OIDC for Actions and fine-grained tokens with expiration</p>
-      </provider-entry>
-    </provider-list>
-  </content-wrap>
-</section>
-
-<!-- ── Decision Tree ───────────────────────────────────── -->
-<section id="decision-tree" class="section section-muted">
-  <content-wrap>
-    <h2 class="section-title">Decision <span style="color:var(--warning)">Tree</span></h2>
-    <p class="section-subtitle">Not sure which alternative fits? Walk through it.</p>
-    <tree-box id="inline-tree"></tree-box>
-    <p style="margin-top:2rem;font-size:0.8125rem;color:var(--fg-muted)">
-      Need more detail? <a href="decision-tree.html" style="color:var(--warning);text-decoration:underline">Use the full interactive decision tree</a> with pros, cons, and provider-specific guidance.
-    </p>
+    <p class="section-subtitle">Answer a few questions about your setup to get a tailored recommendation.</p>
+    <bread-crumb id="breadcrumb"></bread-crumb>
+    <div id="tree"></div>
   </content-wrap>
 </section>
 
@@ -324,89 +270,8 @@
   </footer-inner>
 </site-footer>
 
-<!-- ── Inline decision tree JS ─────────────────────────── -->
-<script>
-(function() {
-  var tree = {
-    start: {
-      question: "What are you authenticating?",
-      options: [
-        { label: "A user (human)", next: "user" },
-        { label: "A machine / service", next: "machine" },
-        { label: "A webhook", answer: "Use HMAC signatures. No bearer credential needed. The sender signs the payload; the receiver verifies." }
-      ]
-    },
-    user: {
-      question: "Is the user authenticating to your own app or a third-party?",
-      options: [
-        { label: "My own app", answer: "Use OAuth 2.0 / OpenID Connect with your own identity provider (or a managed one like Auth0, Clerk, Firebase Auth). Scoped, time-limited, delegated." },
-        { label: "A third-party API on behalf of the user", answer: "Use OAuth 2.0 with delegated authorization. The user grants scoped access; you get short-lived tokens. Never store their credentials." }
-      ]
-    },
-    machine: {
-      question: "Are both services in the same cloud environment?",
-      options: [
-        { label: "Yes, same cloud", answer: "Use workload identity (AWS IAM Roles, GCP Service Account impersonation, Azure Managed Identity). Zero secrets to manage." },
-        { label: "No, cross-boundary", next: "cross" }
-      ]
-    },
-    cross: {
-      question: "What kind of cross-boundary communication?",
-      options: [
-        { label: "Service-to-service API calls", answer: "Use OAuth 2.0 Client Credentials flow with short-lived tokens, or mTLS for mutual authentication. For service mesh: consider SPIFFE/SPIRE." },
-        { label: "CI/CD pipeline to cloud", answer: "Use OIDC federation (e.g., GitHub Actions OIDC \u2192 AWS/GCP/Azure). Your pipeline gets short-lived tokens with no stored secrets." }
-      ]
-    }
-  };
-
-  var currentNode = "start";
-  var answer = null;
-  var history = [];
-  var container = document.getElementById("inline-tree");
-
-  function renderTree() {
-    if (answer) {
-      container.innerHTML =
-        '<div class="tree-rec-label">\u2713 Recommendation</div>' +
-        '<p class="tree-rec-text">' + answer + '</p>' +
-        '<div class="tree-nav">' +
-          '<button class="tree-back" onclick="window._treeBack()">\u2190 Back</button>' +
-          '<button class="tree-reset" onclick="window._treeReset()">Start over</button>' +
-        '</div>';
-      return;
-    }
-
-    var node = tree[currentNode];
-    var html = '<p class="tree-question">' + node.question + '</p><div class="tree-options">';
-    node.options.forEach(function(opt, i) {
-      html += '<button class="tree-opt" onclick="window._treePick(' + i + ')">' + opt.label + '</button>';
-    });
-    html += '</div>';
-    if (history.length > 0) {
-      html += '<div class="tree-nav" style="margin-top:1.5rem"><button class="tree-back" onclick="window._treeBack()">\u2190 Back</button></div>';
-    }
-    container.innerHTML = html;
-  }
-
-  window._treePick = function(i) {
-    var opt = tree[currentNode].options[i];
-    if (opt.answer) { answer = opt.answer; }
-    else if (opt.next) { history.push(currentNode); currentNode = opt.next; }
-    renderTree();
-  };
-  window._treeBack = function() {
-    if (answer) { answer = null; }
-    else if (history.length > 0) { currentNode = history.pop(); }
-    renderTree();
-  };
-  window._treeReset = function() {
-    currentNode = "start"; answer = null; history = [];
-    renderTree();
-  };
-
-  renderTree();
-})();
-</script>
+<script src="decision-tree.js"></script>
+<script src="ui.js"></script>
 
 </body>
 </html>
