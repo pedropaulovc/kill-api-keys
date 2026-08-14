@@ -80,4 +80,5 @@ jobs:
       - name: Record deployment
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
-        run: echo "Deployed PR #${{ github.event.pull_request.number }} to [$PAGES_PROJECT]($DEPLOYMENT_URL) in PPE account \`$EXPECTED_ACCOUNT_ID\`." >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "Deployed PR #${{ github.event.pull_request.number }} to [$PAGES_PROJECT]($DEPLOYMENT_URL) in PPE account \`$EXPECTED_ACCOUNT_ID\`." >> "$GITHUB_STEP_SUMMARY"
