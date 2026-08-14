@@ -1,53 +1,51 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Project overview
 
-Static website advocating for better API authentication practices. Hosted on Cloudflare Pages.
+Kill API Keys is a buildless static site about better machine authentication. The production site is `https://killapikeys.fyi`.
 
-- **Production domain:** killapikeys.fyi (eventual), killapikeys.vza.net (current)
-- **DNS zone:** vza.net (managed in Cloudflare)
-- **Hosting:** Cloudflare Pages with GitHub Git integration (auto-deploys on push to main, no build step — Pages serves from repo root)
-- **Cloudflare account ID:** 18ef3246e9f36d1560485ef53889c0ab
+The public surface is:
+
+- `index.html` — manifesto and interactive authentication decision tree
+- `hall-of-shame.html` — provider clearinghouse
+- `styles.css` — shared styles
+- `decision-tree.js` and `ui.js` — decision-tree data and rendering
+- `hall-of-shame-data.js` and `hall-of-shame-ui.js` — provider data and rendering
+- `logo.svg` and `og-image.png` — public images
 
 ## Commands
 
 ```bash
-pnpm install          # install dependencies
-pnpm lint             # htmlhint on all HTML pages
-pnpm typecheck        # placeholder (no TS yet)
-pnpm test             # placeholder (no unit tests yet)
-pnpm e2e              # placeholder (no e2e tests yet)
-pnpm dev              # local dev server (npx serve .)
+pnpm install
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm e2e
+pnpm dev
+scripts/package-pages.sh dist
 ```
 
-## Architecture
-
-Multi-page static site (HTML + CSS + vanilla JS, no build pipeline).
-
-Two pages: a manifesto against API keys (with an inline interactive decision tree for choosing the right auth method), and a "Hall of Shame" clearinghouse of services and their auth support.
-
-- `index.html` — manifesto homepage with interactive decision tree
-- `hall-of-shame.html` — services clearinghouse page
-- `styles.css` — shared stylesheet (design tokens, components, page-specific styles)
-- `decision-tree.js` — decision tree data (`allNodes` questions and `results` recommendations)
-- `ui.js` — decision tree rendering logic (breadcrumb, question cards, result cards)
-- `hall-of-shame-data.js` — service directory data (auth methods per service)
-- `hall-of-shame-ui.js` — Hall of Shame rendering logic (cards, filters, stats)
+The typecheck, unit-test, and end-to-end commands are placeholders. There is no application build.
 
 ## Deployment
 
-Cloudflare Pages Git integration auto-deploys on every push to `main`. No CI deploy step or API tokens needed. Preview deployments are created for all branches/PRs.
+Cloudflare Pages uses direct uploads from GitHub Actions. Do not deploy the repository root or reconnect Pages Git integration.
 
-Cloudflare Pages config and custom domains can be managed via the Cloudflare API using the wrangler OAuth token at `~/.config/.wrangler/config/default.toml`. The token has `pages:write` scope but not DNS write — DNS changes require the Cloudflare dashboard.
+| Use | GitHub environment | Account ID | Pages project |
+| --- | --- | --- | --- |
+| Production | `cloudflare-production` | `22848e82150fbc3e17d88d21d48efdc4` | `kill-api-keys-vza-net-prod` |
+| PPE | `cloudflare-ppe` | `91054c375dd473e2ff1a2730bbef1b12` | `kill-api-keys-ppe` |
 
-## CI / branch protection
+Each environment provides variable `CLOUDFLARE_ACCOUNT_ID` and secret `CLOUDFLARE_API_TOKEN`. The credentials are account-specific and must not have a shared or default fallback.
 
-GitHub Actions CI (`.github/workflows/ci.yml`) runs four jobs matching the required status checks: `lint`, `typecheck`, `unit-tests`, `e2e-tests`. The `main` branch is protected via rulesets (merge-only, no squash/rebase). Tags matching `v*` are immutable.
+`deploy-production.yml` accepts only `main` and asserts the production account. `deploy-ppe.yml` accepts same-repository pull requests, uploads branch `pr-<number>` to PPE, and skips forks before entering the protected environment. `cleanup-ppe.yml` deletes only PPE preview deployments whose metadata branch matches the closed PR.
 
-All changes to `main` go through PRs. Direct pushes are blocked.
+`scripts/package-pages.sh` builds `dist/` with `git archive` and a public-file allowlist. That keeps repository files, tooling, and untracked private state out of Pages. Deploy jobs smoke both pages, the stylesheet, every required script, and both images on the returned deployment URL.
 
-## Repo policies
+The `killapikeys.fyi` zone and Pages custom domain belong in the production account. The former Pages Git project remains named `kill-api-keys` only through the rollback window; the production workflow must never target it. Web Analytics must be enabled on `kill-api-keys-vza-net-prod` after cutover. See `README.md` for the zone transfer, verification, rollback, and former-project cleanup sequence. No application secrets or data need migration.
 
-Repo settings and rulesets are provisioned by the script at https://github.com/pedropaulovc/typescript-project/blob/main/scripts/provision-repo.sh — run it with `scripts/provision-repo.sh pedropaulovc/kill-api-keys` to reapply.
+## CI and repository policy
+
+`.github/workflows/ci.yml` runs the four protected checks (`lint`, `typecheck`, `unit-tests`, and `e2e-tests`) and also checks the Pages artifact. The `main` branch is merge-only. Do not commit local `.claude/`, `.playwright-cli/`, `.wrangler/`, or generated `dist/` state.
+
+Repository settings and rulesets come from `typescript-project/scripts/provision-repo.sh`. Run it as `scripts/provision-repo.sh pedropaulovc/kill-api-keys` from that repository when settings must be reapplied.
