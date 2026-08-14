@@ -1,0 +1,81 @@
+name: Deploy Production Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  EXPECTED_ACCOUNT_ID: 22848e82150fbc3e17d88d21d48efdc4
+  PAGES_PROJECT: kill-api-keys
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: cloudflare-production
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Assert production account
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [[ "$CLOUDFLARE_ACCOUNT_ID" != "$EXPECTED_ACCOUNT_ID" ]]; then
+            echo "cloudflare-production must target account $EXPECTED_ACCOUNT_ID." >&2
+            exit 1
+          fi
+
+      - name: Package tracked public files
+        run: scripts/package-pages.sh dist
+
+      - name: Deploy production Pages project
+        id: deploy
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: npm
+          wranglerVersion: 4.123.0
+          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }} --branch=main --commit-hash=${{ github.sha }} --commit-dirty=false
+
+      - name: Smoke deployment
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          test -n "$DEPLOYMENT_URL"
+          base=${DEPLOYMENT_URL%/}
+          for path in \
+            / \
+            /hall-of-shame.html \
+            /styles.css \
+            /decision-tree.js \
+            /ui.js \
+            /hall-of-shame-data.js \
+            /hall-of-shame-ui.js \
+            /logo.svg \
+            /og-image.png
+          do
+            curl --fail --silent --show-error --location \
+              --connect-timeout 10 --max-time 30 \
+              --retry 6 --retry-all-errors --retry-delay 2 \
+              --output /dev/null "$base$path"
+          done
+
+      - name: Record deployment
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: echo "Deployed [$PAGES_PROJECT]($DEPLOYMENT_URL) to production account \`$EXPECTED_ACCOUNT_ID\`." >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,83 @@
+name: Deploy PPE Pages Preview
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: pages-ppe-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  EXPECTED_ACCOUNT_ID: 91054c375dd473e2ff1a2730bbef1b12
+  PAGES_PROJECT: kill-api-keys-ppe
+  PAGES_BRANCH: pr-${{ github.event.pull_request.number }}
+
+jobs:
+  deploy:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: cloudflare-ppe
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - name: Checkout pull request head
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Assert PPE account
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [[ "$CLOUDFLARE_ACCOUNT_ID" != "$EXPECTED_ACCOUNT_ID" ]]; then
+            echo "cloudflare-ppe must target account $EXPECTED_ACCOUNT_ID." >&2
+            exit 1
+          fi
+
+      - name: Package tracked public files
+        run: scripts/package-pages.sh dist
+
+      - name: Deploy PPE Pages preview
+        id: deploy
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: npm
+          wranglerVersion: 4.123.0
+          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }} --branch=${{ env.PAGES_BRANCH }} --commit-hash=${{ github.event.pull_request.head.sha }} --commit-dirty=false
+
+      - name: Smoke deployment
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          test -n "$DEPLOYMENT_URL"
+          base=${DEPLOYMENT_URL%/}
+          for path in \
+            / \
+            /hall-of-shame.html \
+            /styles.css \
+            /decision-tree.js \
+            /ui.js \
+            /hall-of-shame-data.js \
+            /hall-of-shame-ui.js \
+            /logo.svg \
+            /og-image.png
+          do
+            curl --fail --silent --show-error --location \
+              --connect-timeout 10 --max-time 30 \
+              --retry 6 --retry-all-errors --retry-delay 2 \
+              --output /dev/null "$base$path"
+          done
+
+      - name: Record deployment
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: echo "Deployed PR #${{ github.event.pull_request.number }} to [$PAGES_PROJECT]($DEPLOYMENT_URL) in PPE account \`$EXPECTED_ACCOUNT_ID\`." >> "$GITHUB_STEP_SUMMARY"

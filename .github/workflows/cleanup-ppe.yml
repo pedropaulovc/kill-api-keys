@@ -1,0 +1,104 @@
+name: Clean Up PPE Pages Preview
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [closed]
+
+concurrency:
+  group: pages-ppe-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  EXPECTED_ACCOUNT_ID: 91054c375dd473e2ff1a2730bbef1b12
+  PAGES_PROJECT: kill-api-keys-ppe
+  PAGES_BRANCH: pr-${{ github.event.pull_request.number }}
+
+jobs:
+  cleanup:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: cloudflare-ppe
+    steps:
+      - name: Assert PPE account
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [[ "$CLOUDFLARE_ACCOUNT_ID" != "$EXPECTED_ACCOUNT_ID" ]]; then
+            echo "cloudflare-ppe must target account $EXPECTED_ACCOUNT_ID." >&2
+            exit 1
+          fi
+
+      - name: Delete this PR's preview deployments
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          node --input-type=module <<'NODE'
+          const {
+            CLOUDFLARE_ACCOUNT_ID,
+            CLOUDFLARE_API_TOKEN,
+            EXPECTED_ACCOUNT_ID,
+            PAGES_BRANCH,
+            PAGES_PROJECT,
+          } = process.env;
+
+          if (CLOUDFLARE_ACCOUNT_ID !== EXPECTED_ACCOUNT_ID) {
+            throw new Error(`Refusing cleanup outside PPE account ${EXPECTED_ACCOUNT_ID}.`);
+          }
+          if (!/^pr-[1-9][0-9]*$/.test(PAGES_BRANCH)) {
+            throw new Error(`Refusing unexpected Pages branch ${PAGES_BRANCH}.`);
+          }
+          if (PAGES_PROJECT !== "kill-api-keys-ppe") {
+            throw new Error(`Refusing unexpected Pages project ${PAGES_PROJECT}.`);
+          }
+
+          const root = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}`;
+          const project = encodeURIComponent(PAGES_PROJECT);
+          const headers = {
+            Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
+            "Content-Type": "application/json",
+          };
+
+          async function request(url, options = {}) {
+            const response = await fetch(url, { ...options, headers });
+            const body = await response.json();
+            if (!response.ok || !body.success) {
+              throw new Error(`${response.status} ${JSON.stringify(body.errors ?? body)}`);
+            }
+            return body;
+          }
+
+          const matches = [];
+          let page = 1;
+          let totalPages = 1;
+          do {
+            const body = await request(
+              `${root}/pages/projects/${project}/deployments?env=preview&page=${page}&per_page=100`,
+            );
+            for (const deployment of body.result) {
+              const branch = deployment.deployment_trigger?.metadata?.branch;
+              if (deployment.environment === "preview" && branch === PAGES_BRANCH) {
+                matches.push(deployment.id);
+              }
+            }
+            totalPages = body.result_info?.total_pages ?? page;
+            page += 1;
+          } while (page <= totalPages);
+
+          for (const id of matches) {
+            await request(
+              `${root}/pages/projects/${project}/deployments/${encodeURIComponent(id)}`,
+              { method: "DELETE" },
+            );
+            console.log(`Deleted ${PAGES_PROJECT}/${PAGES_BRANCH} deployment ${id}.`);
+          }
+
+          if (matches.length === 0) {
+            console.log(`No deployments remain for ${PAGES_PROJECT}/${PAGES_BRANCH}.`);
+          }
+          NODE
