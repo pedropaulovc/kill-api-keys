@@ -33,7 +33,7 @@ Cloudflare Pages uses direct uploads from GitHub Actions. Do not deploy the repo
 
 | Use | GitHub environment | Account ID | Pages project |
 | --- | --- | --- | --- |
-| Production | `cloudflare-production` | `22848e82150fbc3e17d88d21d48efdc4` | `kill-api-keys` |
+| Production | `cloudflare-production` | `22848e82150fbc3e17d88d21d48efdc4` | `kill-api-keys-vza-net-prod` |
 | PPE | `cloudflare-ppe` | `91054c375dd473e2ff1a2730bbef1b12` | `kill-api-keys-ppe` |
 
 Each environment provides variable `CLOUDFLARE_ACCOUNT_ID` and secret `CLOUDFLARE_API_TOKEN`. The credentials are account-specific and must not have a shared or default fallback.
@@ -42,7 +42,7 @@ Each environment provides variable `CLOUDFLARE_ACCOUNT_ID` and secret `CLOUDFLAR
 
 `scripts/package-pages.sh` builds `dist/` with `git archive` and a public-file allowlist. That keeps repository files, tooling, and untracked private state out of Pages. Deploy jobs smoke both pages, the stylesheet, every required script, and both images on the returned deployment URL.
 
-The `killapikeys.fyi` zone and Pages custom domain belong in the production account. Web Analytics must be enabled on the destination Pages project after cutover. See `README.md` for the zone transfer, verification, rollback, and former Pages-project cleanup sequence. No application secrets or data need migration.
+The `killapikeys.fyi` zone and Pages custom domain belong in the production account. The former Pages Git project remains named `kill-api-keys` only through the rollback window; the production workflow must never target it. Web Analytics must be enabled on `kill-api-keys-vza-net-prod` after cutover. See `README.md` for the zone transfer, verification, rollback, and former-project cleanup sequence. No application secrets or data need migration.
 
 ## CI and repository policy
 

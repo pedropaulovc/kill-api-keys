@@ -14,7 +14,7 @@ permissions:
 
 env:
   EXPECTED_ACCOUNT_ID: 22848e82150fbc3e17d88d21d48efdc4
-  PAGES_PROJECT: kill-api-keys
+  PAGES_PROJECT: kill-api-keys-vza-net-prod
 
 jobs:
   deploy:
